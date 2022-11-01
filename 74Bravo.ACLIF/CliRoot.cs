@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using static System.Collections.Specialized.BitVector32;
 using System.Threading;
+using ACLIF.Attributes;
+using System.Reflection;
 
 namespace ACLIF // Note: actual namespace depends on the project name.
 {
@@ -60,12 +62,32 @@ namespace ACLIF // Note: actual namespace depends on the project name.
 
         //}
 
-        public override string Module => "";
+        public sealed override string Module => "";
+
+        public override string Description => RootAttribute.Description;
+
+        public override string Help => RootAttribute.HelpText;
+
+
+        private CliRootAttribute _rootAttribute;
+        protected CliRootAttribute RootAttribute
+        {
+            get
+            {
+                if (_rootAttribute == null)
+                {
+                    _rootAttribute = GetType().GetCustomAttribute<CliRootAttribute>();
+                }
+                return _rootAttribute;
+            }
+        }
 
         public override bool HandlesCommand(string[] args)
         {
             return true;
         }
+
+
 
         protected override IEnumerable<ICliVerb> GetVerbs()
         {

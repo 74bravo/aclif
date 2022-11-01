@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ACLIF.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class CliVerbOptionAttribute : BaseAttribute
+    public class CliVerbOptionAttribute : CliVerbArgumentAttribute
     {
         private readonly string? longName;
         private readonly string? shortName;

@@ -12,6 +12,7 @@ namespace ACLIF
     internal class CliModuleCollection : ICliModuleCollection
     {
         [ImportMany]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private IEnumerable<Lazy<ICliModule>> _moduleDefinitions;
         private readonly IReadOnlyList<ICliModule> _explicitModules;
 
