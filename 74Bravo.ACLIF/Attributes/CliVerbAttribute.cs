@@ -13,7 +13,7 @@ namespace ACLIF.Attributes
         private readonly string verb;
 
 
-        private CliVerbAttribute(string verb) : base()
+        public CliVerbAttribute(string verb) : base()
         {
             if (verb == null) throw new ArgumentNullException("verb");
 

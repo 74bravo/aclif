@@ -16,7 +16,7 @@ namespace ACLIF.Attributes
         //private char separator = ' ';
         //private string group = string.Empty;
 
-        private CliVerbArgumentAttribute() : base()
+        public CliVerbArgumentAttribute() : base()
         {
 
         }

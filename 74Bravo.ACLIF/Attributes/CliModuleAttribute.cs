@@ -13,7 +13,7 @@ namespace ACLIF.Attributes
         private readonly string module;
 
 
-        private CliModuleAttribute(string module) : base()
+        public CliModuleAttribute(string module) : base()
         {
             if (module == null) throw new ArgumentNullException("module");
 

@@ -2,7 +2,7 @@
   "profiles": {
     "74Bravo.ACLIF.Debug": {
       "commandName": "Project",
-      "commandLineArgs": "-d -v --verbosity module2 -t -x --extreme verb2 -test2 SomeArgument . \"adfsasd adfads  asdfasdf  asdfads   asdfasdfas adsfasdf   asdfasdfas\""
+      "commandLineArgs": "-d -v --verbosity module2 --help"
     }
   }
 }

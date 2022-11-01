@@ -16,7 +16,7 @@ namespace ACLIF.Attributes
         private char separator = ' ';
         private string group = string.Empty;
 
-        private CliVerbOptionAttribute(string longName, string? shortName = null) : base()
+        public CliVerbOptionAttribute(string longName, string? shortName = null) : base()
         {
             if (longName == null) throw new ArgumentNullException("longName");
 

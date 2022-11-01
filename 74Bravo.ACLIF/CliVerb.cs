@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ACLIF.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,9 +15,9 @@ namespace ACLIF
         {
             Console.WriteLine($"Instantiating {this.GetType().FullName}");
         }
-        public abstract string verb { get; }
-        public abstract string Description { get; }
-        public abstract string Help { get; }
+        public virtual string verb => VerbAttributes.Verb;
+        public virtual string Description => VerbAttributes.Description;
+        public virtual string Help => VerbAttributes.HelpText;
 
         public string[] Arguments { get; protected set; }
 
@@ -32,6 +34,19 @@ namespace ACLIF
                 return this.verb == args[0].Trim(' ').ToLower();
             }
             return false;
+        }
+
+        private CliVerbAttribute _verbAttributes;
+        protected CliVerbAttribute VerbAttributes
+        {
+            get
+            {
+                if (_verbAttributes == null)
+                {
+                    _verbAttributes = GetType().GetCustomAttribute<CliVerbAttribute>();
+                }
+                return _verbAttributes;
+            }
         }
 
         public virtual string[] ProcessCommandOptions(string[] args)

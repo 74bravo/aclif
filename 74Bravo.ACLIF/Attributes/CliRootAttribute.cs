@@ -10,7 +10,7 @@ namespace ACLIF.Attributes
     public class CliRootAttribute : BaseAttribute
     {
 
-        private CliRootAttribute() : base()
+        public CliRootAttribute() : base()
         {
 
         }

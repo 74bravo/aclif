@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ACLIF.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,9 +37,26 @@ namespace ACLIF
             yield return new HelpVerb(Description, Help);
         }
 
-        public abstract string Module { get; }
+        public virtual string Module => ModuleAttribute.Module;
 
         public override sealed string verb => Module;
+
+        public override string Description => ModuleAttribute.Description;
+
+        public override string Help => ModuleAttribute.HelpText;
+
+        private CliModuleAttribute _moduleAttribute;
+        protected CliModuleAttribute ModuleAttribute
+        {
+            get
+            {
+                if (_moduleAttribute == null)
+                {
+                    _moduleAttribute = GetType().GetCustomAttribute<CliModuleAttribute>();
+                }
+                return _moduleAttribute;
+            }
+        }
 
         protected abstract IEnumerable<ICliVerb> GetVerbs();
         //{
