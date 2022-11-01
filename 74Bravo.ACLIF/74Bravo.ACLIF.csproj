@@ -5,7 +5,22 @@
     <RootNamespace>ACLIF</RootNamespace>
     <!--<ImplicitUsings>enable</ImplicitUsings>-->
     <Nullable>enable</Nullable>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Title>Another Command Line Interface Framework (ACLIF)</Title>
+    <Version>0.1.0-Preview</Version>
+    <Company>74 Bravo, LLC.</Company>
+    <Authors>Ryan V. Millett</Authors>
+    <Description>Another Command Line Interface Framework (ACLIF)</Description>
+    <PackageIcon>74 Bravo Nuget Gravatar.png</PackageIcon>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\Users\RyanMillett\OneDrive - 74 Bravo\Logos\74Bravo Logo Images\Standard Pack\74 Bravo Nuget Gravatar.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
