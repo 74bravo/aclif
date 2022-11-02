@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using static System.Collections.Specialized.BitVector32;
 using System.Threading;
+using ACLIF.Attributes;
+using System.Reflection;
+using System.Diagnostics.SymbolStore;
+using System.ComponentModel;
 
 namespace ACLIF // Note: actual namespace depends on the project name.
 {
@@ -14,6 +18,13 @@ namespace ACLIF // Note: actual namespace depends on the project name.
         protected CliRoot()
         {
         }
+
+        [CliVerbSwitch("--diagnostics", "-d")]
+        public bool Diagnostics { get; set; }
+
+
+        [CliVerbOption("--verbosity", "-v")]
+        public Verbosity Verbosity { get; set; }
 
         protected virtual string CliModuleSearchExpression => "*.climodule.*.dll";
 
@@ -43,7 +54,7 @@ namespace ACLIF // Note: actual namespace depends on the project name.
             }
             catch (Exception ex)
             {
-
+                throw ex;
             }
             finally
             {
@@ -60,7 +71,21 @@ namespace ACLIF // Note: actual namespace depends on the project name.
 
         //}
 
-        public override string Module => "";
+        public sealed override string Module => "";
+
+        public override string Description => 
+            !RootAttribute.IsEmpty
+            ? RootAttribute.Description
+            : throw new NotImplementedException("Description property must be implemented or use CliRoot Attribute");
+
+        public override string Help => 
+            !RootAttribute.IsEmpty
+            ? RootAttribute.HelpText
+            : throw new NotImplementedException("Help property must be implemented or use CliRoot Attribute");
+
+        private CliRootAttribute _rootAttribute;
+        protected CliRootAttribute RootAttribute =>
+            _rootAttribute ??= GetType().GetCustomAttribute<CliRootAttribute>() ?? CliRootAttribute.Empty;
 
         public override bool HandlesCommand(string[] args)
         {
@@ -74,11 +99,37 @@ namespace ACLIF // Note: actual namespace depends on the project name.
                 yield return cliModule;
             }
         }
+
+        internal sealed override void PreExecute(string[] args)
+        {
+            //TODO:  Implement Root Level Functionality
+            RootPreExecute(args);
+        }
+
+        protected virtual void RootPreExecute(string[] args) { }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected sealed override void ModulePreExecute(string[] args) { }
+
+
         protected override ICliVerbResult Execute(string[] args)
         {
-            // do nothing
-            return new VerbResult(false, "No Action Taken", 1);
+            // do nothing for now...
+            return VerbResult.NoAction();
         }
+
+        internal sealed override void PostExecute(string[] args)
+        {
+            //TODO:  Implement Root Level Functionality
+            RootPostExecute(args);
+        }
+
+        protected virtual void RootPostExecute(string[] args) { }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected sealed override void ModulePostExecute(string[] args) { }
+
+
 
         protected virtual void Dispose(bool disposing)
         {
@@ -86,11 +137,7 @@ namespace ACLIF // Note: actual namespace depends on the project name.
                 return;
             if (disposing)
             {
-                //AppDomain.CurrentDomain.UnhandledException -= new UnhandledExceptionEventHandler(this.AppDomain_OnUnhandledException);
-                //Interlocked.Decrement(ref Session._instanceCount);
-                //LogManager.Shutdown();
-                //this._moduleLoader?.Dispose();
-                //this._services?.Dispose();
+                //TODO: Implement other disposing actions.
             }
             this._isDisposed = true;
         }

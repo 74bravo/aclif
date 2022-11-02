@@ -8,7 +8,7 @@ namespace ACLIF
 {
     public interface ICliVerb
     {
-        string verb { get; }
+        string Verb { get; }
         bool HandlesCommand(string[] args);
         ICliVerbResult ExecuteWhenHandles(string[] args);
 
@@ -16,7 +16,7 @@ namespace ACLIF
         string Help { get; }
 
 
-        string[] ProcessCommandOptions(string[] args);
+        string[] ProcessCommandArguments(string[] args);
         
     }
 }
