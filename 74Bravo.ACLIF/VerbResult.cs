@@ -26,5 +26,10 @@ namespace ACLIF
             return new VerbResult(true, message, 0);
         }
 
+           public static VerbResult NoAction(string message = "No action was taken.  This is likely due to the command being incomplete.")
+        {
+            return new VerbResult(true, message, 1);
+        }
+
     }
 }

@@ -9,7 +9,7 @@ namespace _74Bravo.ACLIF.Debug.Command1
 {
     public class verb1 : CliVerb
     {
-        public override string verb => "verb1";
+        public override string Verb => "verb1";
 
         public override string Description => "Verb1 Description";
 

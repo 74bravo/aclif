@@ -10,39 +10,29 @@ namespace ACLIF.Attributes
     public abstract class BaseAttribute : Attribute
     {
 
-        private string helpText;
-        private string description;
+
+        private bool _isempty;
 
 
-
-        protected internal BaseAttribute()
+        protected internal BaseAttribute(bool isEmpty = false)
         {
-            helpText = string.Empty;
-
+            _isempty = isEmpty;
         }
 
+        public bool IsEmpty => _isempty;
 
-
-
-
+        private string? _helpText;
         public string HelpText
         {
-            get => helpText ?? string.Empty;
-            set => helpText = value ?? throw new ArgumentNullException("value");
+            get => _helpText ??= string.Empty;
+            set => _helpText = value ?? string.Empty;
         }
 
+        private string? _description;
         public string Description
         {
-            get { return description; }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                description = value;
-            }
+            get  => _description ??= string.Empty; 
+            set => _description = value ?? string.Empty;
         }
 
 

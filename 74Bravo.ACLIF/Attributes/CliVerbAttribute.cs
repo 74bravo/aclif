@@ -10,20 +10,24 @@ namespace ACLIF.Attributes
     public class CliVerbAttribute : BaseAttribute
     {
 
-        private readonly string verb;
+        private readonly string _verb;
 
+        public CliVerbAttribute(string verb) : this(verb, false) { }
 
-        public CliVerbAttribute(string verb) : base()
+        internal CliVerbAttribute(bool isempty = false) : this(string.Empty, isempty) { }
+
+        internal CliVerbAttribute (string verb, bool isempty) : base(isempty)
         {
-            if (verb == null) throw new ArgumentNullException("verb");
-
-            this.verb = verb;
+            _verb = isempty ? "empty-verb" : verb ?? string.Empty;
         }
 
-        public string? Verb
+        public string Verb
         {
-            get { return verb; }
+            get { return _verb; }
         }
+
+        private static CliVerbAttribute? _empty;
+        public static CliVerbAttribute Empty => _empty ??= new CliVerbAttribute(isempty:true);
 
     }
 

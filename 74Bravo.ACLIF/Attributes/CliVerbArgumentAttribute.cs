@@ -10,32 +10,18 @@ namespace ACLIF.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class CliVerbArgumentAttribute : BaseAttribute
     {
-        //private readonly string? longName;
-        //private readonly string? shortName;
-        //private string setName;
-        //private bool flagCounter;
-        //private char separator = ' ';
-        //private string group = string.Empty;
 
-        private object @default;
-        private string hint;
-        private Type resourceType;
-
-        public CliVerbArgumentAttribute() : base()
+        internal CliVerbArgumentAttribute(bool isempty) : base(isempty) 
         {
-            Hint = string.Empty;
-            resourceType = null;
         }
 
+        public CliVerbArgumentAttribute() : this(false) { }
 
-
-        public object Default
+        private object? @default;
+        public object? Default
         {
-            get { return @default; }
-            set
-            {
-                @default = value;
-            }
+            get => @default; 
+            set => @default = value;
         }
 
         public bool Required
@@ -44,29 +30,23 @@ namespace ACLIF.Attributes
             set;
         }
 
+        private string? _hint;
         public string Hint
         {
-            get { return hint; }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException("value");
-                }
-
-                hint = value;
-            }
+            get => _hint ??= string.Empty;
+            set => _hint = value ?? string.Empty;
         }
 
 
+        private Type? _resourceType;
         public Type ResourceType
         {
-            get { return resourceType; }
-            set
-            {
-                resourceType = value;
-            }
+            get => _resourceType ??= typeof(string);
+            set => _resourceType = value ?? typeof(string);
         }
+
+        private static CliVerbArgumentAttribute? _empty;
+        public static CliVerbArgumentAttribute Empty => _empty ??= new CliVerbArgumentAttribute(isempty: true);
 
     }
 }

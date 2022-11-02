@@ -2,7 +2,7 @@
   "profiles": {
     "74Bravo.ACLIF.Debug": {
       "commandName": "Project",
-      "commandLineArgs": "-d -v --verbosity module2 --help"
+      "commandLineArgs": "-d -v diagnostic module2 verb2 --opt1 Opt1ArgValue --opt2 24 --opt3 shorts --opt4 1/1/2022 --opt5 . . \"adfsasd adfads  asdfasdf  asdfads   asdfasdfas adsfasdf   asdfasdfas\"\r\n"
     }
   }
 }

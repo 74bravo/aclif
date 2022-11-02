@@ -18,7 +18,7 @@ namespace ACLIF
             _help = help;
         }
 
-        public override string verb => "--help";
+        public override string Verb => "--help";
 
         public override string Description => _description;
 

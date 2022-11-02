@@ -10,23 +10,26 @@ namespace ACLIF.Attributes
     public class CliModuleAttribute : BaseAttribute
     {
 
-        private readonly string module;
+        private readonly string _module;
 
 
-        public CliModuleAttribute(string module) : base()
+        public CliModuleAttribute(string module) : this(module, false) { }
+
+        internal CliModuleAttribute(bool isempty = false) : this (string.Empty, isempty) { }
+
+        internal CliModuleAttribute(string module, bool isempty) : base(isempty)
         {
-            if (module == null) throw new ArgumentNullException("module");
-
-            this.module = module;
+            _module = isempty ? "empty-module" : module ?? string.Empty;
         }
 
-        public string? Module
+        public string Module
         {
-            get { return module; }
+            get { return _module; }
         }
+
+        private static CliModuleAttribute? _emptyCliModuleAttribute;
+        public static CliModuleAttribute Empty =>
+            _emptyCliModuleAttribute ??= new CliModuleAttribute(true);
 
     }
-
-
-
 }

@@ -1,6 +1,7 @@
 ﻿using ACLIF.Attributes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
@@ -12,51 +13,36 @@ namespace ACLIF
     public abstract class CLIModule : CliVerb, ICliModule
     {
 
-        private IEnumerable<ICliVerb> _cliVerbs;
-
-        public IEnumerable<ICliVerb> CliVerbs
-        {
-            get
-            {
-                if (_cliVerbs == null)
-                {
-                    _cliVerbs = GetHelpVerb();
-                    var _moduleVerbs = GetVerbs();
-                    if (_moduleVerbs != null)
-                    {
-                        _cliVerbs = _cliVerbs.Concat(_moduleVerbs);
-                    }
-                    //_cliVerbs.Concat(_otherVerbs);
-                }
-                return _cliVerbs;
-            }
-        }
+        private IEnumerable<ICliVerb>? _cliVerbs;
+        public IEnumerable<ICliVerb> CliVerbs => 
+            _cliVerbs ??= (GetHelpVerb().Concat(GetVerbs()));
 
         private IEnumerable<ICliVerb> GetHelpVerb ()
         {
             yield return new HelpVerb(Description, Help);
         }
 
-        public virtual string Module => ModuleAttribute.Module;
+        public virtual string Module => 
+            !ModuleAttribute.IsEmpty 
+            ? ModuleAttribute.Module 
+            : throw new NotImplementedException("Module property must be implemented or use CliModule Attribute");
 
-        public override sealed string verb => Module;
+        public override sealed string Verb => Module;
 
-        public override string Description => ModuleAttribute.Description;
+        public override string Description => 
+            !ModuleAttribute.IsEmpty 
+            ? ModuleAttribute.Description 
+            : throw new NotImplementedException("Description property must be implemented or use CliModule Attribute");
 
-        public override string Help => ModuleAttribute.HelpText;
+        public override string Help => 
+            !ModuleAttribute.IsEmpty 
+            ? ModuleAttribute.HelpText 
+            : throw new NotImplementedException("Help property must be implemented or use CliModule Attribute");
 
-        private CliModuleAttribute _moduleAttribute;
-        protected CliModuleAttribute ModuleAttribute
-        {
-            get
-            {
-                if (_moduleAttribute == null)
-                {
-                    _moduleAttribute = GetType().GetCustomAttribute<CliModuleAttribute>();
-                }
-                return _moduleAttribute;
-            }
-        }
+        private CliModuleAttribute? _moduleAttribute;
+        protected CliModuleAttribute ModuleAttribute => 
+            _moduleAttribute ??= GetType().GetCustomAttribute<CliModuleAttribute>() ?? CliModuleAttribute.Empty;
+
 
         protected abstract IEnumerable<ICliVerb> GetVerbs();
         //{
@@ -64,28 +50,52 @@ namespace ACLIF
         //    yield break;
         //}
 
+
+        internal override void PreExecute(string[] args) => ModulePreExecute(args);
+
+        protected virtual void ModulePreExecute(string[] args) { }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected sealed override void VerbPreExecute(string[] args) { }
+
+        internal override void PostExecute(string[] args) => ModulePostExecute(args);
+
+        protected virtual void ModulePostExecute(string[] args) { }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        protected sealed override void VerbPostExecute(string[] args) { }
+
         protected override ICliVerbResult Execute(string[] args)
         {
-            throw new NotImplementedException();
+            return VerbResult.NoAction();
         }
 
         public override ICliVerbResult ExecuteWhenHandles(string[] args)
         {
             //TODO  : Implement MultiThreaded Processing.
 
-            var nextVerbArgs = ProcessCommandOptions(args);
+
+            ICliVerbResult? result = null;
+
+            var nextVerbArgs = ProcessCommandArguments(args);
+
+            PreExecute(args);
 
             foreach (ICliVerb verb in CliVerbs)
             {
                 if (verb.HandlesCommand(nextVerbArgs))
                 {
-                    var result = verb.ExecuteWhenHandles(nextVerbArgs);
+                    result = verb.ExecuteWhenHandles(nextVerbArgs);
                     //if (result.CommandHandled) return result;
-                    return result;
+                    break;
                 }
             }
 
-            return Execute(nextVerbArgs);
+            result = result ?? Execute(nextVerbArgs);
+
+            PostExecute(args);
+
+            return result;
 
         }
     }

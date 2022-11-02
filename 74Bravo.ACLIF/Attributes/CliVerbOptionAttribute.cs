@@ -7,51 +7,37 @@ using System.Threading.Tasks;
 namespace ACLIF.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class CliVerbOptionAttribute : CliVerbArgumentAttribute
+    public class CliVerbOptionAttribute : CliVerbOptionAttributeBase
     {
-        private readonly string? longName;
-        private readonly string? shortName;
-        private string setName;
-        private bool flagCounter;
-        private char separator = ' ';
-        private string group = string.Empty;
 
-        public CliVerbOptionAttribute(string longName, string? shortName = null) : base()
+        //private string _setName;
+        //private bool flagCounter;
+
+        // private string _group = string.Empty;
+
+        internal CliVerbOptionAttribute(string? longName, string? shortName, bool isempty) : base(longName, shortName, isempty) { }
+
+        internal CliVerbOptionAttribute(bool isempty) : this(string.Empty, string.Empty, isempty)
         {
-            if (longName == null) throw new ArgumentNullException("longName");
-
-            this.shortName = shortName;
-            this.longName = longName;
-            setName = string.Empty;
-            separator = ' ';
         }
 
+        public CliVerbOptionAttribute(string? longName, string? shortName = null) : this(longName, shortName, false)
+        {
+        }
 
         public CliVerbOptionAttribute()
             : this(string.Empty, string.Empty)
         {
         }
 
-
         public CliVerbOptionAttribute(string longName, char shortName)
             : this(longName, shortName.ToString())
         {
         }
 
-
         public CliVerbOptionAttribute(char shortName)
             : this(string.Empty, shortName.ToString())
         {
-        }
-
-        public string? LongName
-        {
-            get { return longName; }
-        }
-
-        public string? ShortName
-        {
-            get { return shortName; }
         }
 
         ///// <summary>
@@ -78,15 +64,21 @@ namespace ACLIF.Attributes
         //    set { flagCounter = value; }
         //}
 
+
+
+        private char _separator = ' ';
         /// <summary>
         /// When applying attribute to <see cref="IEnumerable{T}"/> target properties,
         /// it allows you to split an argument and consume its content as a sequence.
         /// </summary>
         public char Separator
         {
-            get { return separator; }
-            set { separator = value; }
+            get { return _separator; }
+            set { _separator = value; }
         }
+
+        private bool? _argValueIsNext;
+        public bool ArgValueIsNext => _argValueIsNext ??= _separator == ' ';
 
         ///// <summary>
         ///// Gets or sets the option group name. When one or more options are grouped, at least one of them should have value. Required rules are ignored.
@@ -96,5 +88,9 @@ namespace ACLIF.Attributes
         //    get { return group; }
         //    set { group = value; }
         //}
+
+        private static CliVerbOptionAttribute? _empty;
+        public static new CliVerbOptionAttribute Empty => _empty ??= new CliVerbOptionAttribute(isempty: true);
+
     }
 }
