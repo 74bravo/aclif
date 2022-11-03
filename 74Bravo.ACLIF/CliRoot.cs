@@ -9,7 +9,7 @@ using System.ComponentModel;
 
 namespace ACLIF // Note: actual namespace depends on the project name.
 {
-    public abstract class CliRoot : CLIModule, ICliRoot, IDisposable
+    public abstract class CliRoot : CliModule, ICliRoot, IDisposable
     {
         //private string[] _args;
 
@@ -17,51 +17,41 @@ namespace ACLIF // Note: actual namespace depends on the project name.
 
         protected CliRoot()
         {
+            Log.Trace($"Instantiating CLIRoot() from {this.GetType().FullName}");
         }
 
         [CliVerbSwitch("--diagnostics", "-d")]
         public bool Diagnostics { get; set; }
 
+        [CliVerbSwitch("--debug", Hidden = true)]
+        public bool Debugging { get; set; } = false;
 
         [CliVerbOption("--verbosity", "-v")]
         public Verbosity Verbosity { get; set; }
 
         protected virtual string CliModuleSearchExpression => "*.climodule.*.dll";
 
-        private CliModuleLoader _cliModuleLoader;
-        private CliModuleLoader CliModuleLoader
-            {
-            get
-            {
-                if (_cliModuleLoader == null)
-                {
-                    _cliModuleLoader = new CliModuleLoader(CliModuleSearchExpression);
-                }
-                return _cliModuleLoader;
-            }
-         }
-
+        private CliModuleLoader? _cliModuleLoader;
+        private CliModuleLoader CliModuleLoader =>
+            _cliModuleLoader ??= new CliModuleLoader(CliModuleSearchExpression);
 
         protected static int Go<T> (string[] args) where T : CliRoot, new()
         {
-            int resultCode = 1;
-
+            ICliVerbResult result;
             try
             {
-                var result = new T().ExecuteWhenHandles(args);
-                Console.WriteLine(result.Message);
-                return result.ResultCode;
+                result = new T().ExecuteWhenHandles(args);
             }
             catch (Exception ex)
             {
-                throw ex;
+               result = VerbResult.Exception(ex);
             }
             finally
             {
               
             }
-
-            return resultCode;
+            Console.WriteLine(result.Message);
+            return result.ResultCode;
         }
 
         //public override ICliVerbResult Execute(string[] args)
@@ -78,12 +68,21 @@ namespace ACLIF // Note: actual namespace depends on the project name.
             ? RootAttribute.Description
             : throw new NotImplementedException("Description property must be implemented or use CliRoot Attribute");
 
-        public override string Help => 
+        public override string HelpFormat => 
             !RootAttribute.IsEmpty
-            ? RootAttribute.HelpText
+            ? RootAttribute.HelpFormat
             : throw new NotImplementedException("Help property must be implemented or use CliRoot Attribute");
 
-        private CliRootAttribute _rootAttribute;
+        public override string HelpLabel =>
+             !RootAttribute.IsEmpty
+            ? String.IsNullOrEmpty(RootAttribute.HelpLabel)
+            //            ? RootAttribute.Module
+            // TODO:  Grab the tool command line value.
+            ? string.Empty
+            : RootAttribute.HelpLabel
+            : string.Empty;
+
+        private CliRootAttribute? _rootAttribute;
         protected CliRootAttribute RootAttribute =>
             _rootAttribute ??= GetType().GetCustomAttribute<CliRootAttribute>() ?? CliRootAttribute.Empty;
 
@@ -102,8 +101,21 @@ namespace ACLIF // Note: actual namespace depends on the project name.
 
         internal sealed override void PreExecute(string[] args)
         {
-            //TODO:  Implement Root Level Functionality
+
+            Log.Verbosity = this.Verbosity;
+           
+            if (this.Debugging) ConfigureDebugging();
+
             RootPreExecute(args);
+        }
+
+        internal void ConfigureDebugging()
+        {
+            Log.Information("Initializing Debug Mode");
+            Log.Debugging = true;
+
+            Log.Debug("Started");
+
         }
 
         protected virtual void RootPreExecute(string[] args) { }
@@ -128,8 +140,6 @@ namespace ACLIF // Note: actual namespace depends on the project name.
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected sealed override void ModulePostExecute(string[] args) { }
-
-
 
         protected virtual void Dispose(bool disposing)
         {

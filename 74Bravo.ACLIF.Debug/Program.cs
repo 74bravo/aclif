@@ -6,8 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace ACLIF.Debug 
 {
-    //[CliRoot(Description = "Another CLI Framework", 
-    //         HelpText = "Help With the Framework")]
+    [CliRoot(Description = "Another CLI Framework Console CLI for Debugging",HelpLabel = "74Bravo.ACLIF.Debug")]
     public class Program : CliRoot
     {
 

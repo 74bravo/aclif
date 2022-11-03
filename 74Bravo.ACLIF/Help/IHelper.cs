@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ACLIF
+namespace ACLIF.Help
 {
-    public interface ICliModule : ICliVerb
+    public interface IHelper
     {
-
-
+        void Help(int depth);
 
     }
 }

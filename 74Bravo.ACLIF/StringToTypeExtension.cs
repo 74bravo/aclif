@@ -12,15 +12,14 @@ namespace ACLIF
 {
     public static class StringToTypeExtension
     {
-
-        public static object? FromString(this Type type, string? stringValue, CultureInfo? cultureInfo = null)
+        public static object? FromString(this Type type, string stringValue, CultureInfo? cultureInfo = null)
         {
             if (string.IsNullOrEmpty(stringValue))
             {
                 return type.Default2();
             }
 
-            Type valueType = type;
+            Type? valueType = type;
 
             // If the TValue is a nullable type, get the underlying type.
             if (valueType.GetTypeInfo().IsGenericType && valueType.GetGenericTypeDefinition() == typeof(Nullable<>))
@@ -56,7 +55,7 @@ namespace ACLIF
                     }
                 }
 
-                ConstructorInfo constructor = valueType.GetConstructor(new [] { typeof(string) });
+                ConstructorInfo? constructor = valueType?.GetConstructor(new [] { typeof(string) });
 
                 if (constructor != null)
                 {
@@ -79,7 +78,6 @@ namespace ACLIF
 
             return null;
         }
-
 
     }
 }

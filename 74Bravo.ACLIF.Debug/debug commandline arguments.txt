@@ -1,0 +1,30 @@
+
+
+
+AfterMicrosoftNETSdkTargets
+
+
+
+
+EnsureMSBuildPropsAndTargets
+
+
+-d -v --verbosity module2 -t -x --extreme verb2 --test2 SomeArgument . "adfsasd adfads  asdfasdf  asdfads   asdfasdfas adsfasdf   asdfasdfas"
+
+-d -v --verbosity module2 --help
+
+
+
+module2 verb2 --opt1 Opt1ArgValue --opt2 24 --opt3 shorts --opt4 1/1/2022 --opt5 . . "adfsasd adfads  asdfasdf  asdfads   asdfasdfas adsfasdf   asdfasdfas"
+
+
+
+-d -v diagnostic module2 verb2 --opt1 Opt1ArgValue --opt2 24 --opt3 shorts --opt4 1/1/2022 --opt5 . . "adfsasd adfads  asdfasdf  asdfads   asdfasdfas adsfasdf   asdfasdfas"
+
+--debug module2 verb2 --help
+
+--debug module2 --help
+
+--debug --help
+
+-d -v diagnostic module2 verb2 --opt1 Opt1ArgValue --opt2 24 --opt3 shorts --opt4 1/1/2022 --opt5 . . "adfsasd adfads  asdfasdf  asdfads   asdfasdfas adsfasdf   asdfasdfas"

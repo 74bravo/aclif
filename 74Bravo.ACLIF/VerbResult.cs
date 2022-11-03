@@ -31,5 +31,10 @@ namespace ACLIF
             return new VerbResult(true, message, 1);
         }
 
+        public static VerbResult Exception(Exception ex)
+        {
+            return new VerbResult(true, ex.Message, 2);
+        }
+
     }
 }

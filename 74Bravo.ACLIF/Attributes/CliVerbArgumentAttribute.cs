@@ -11,6 +11,11 @@ namespace ACLIF.Attributes
     public class CliVerbArgumentAttribute : BaseAttribute
     {
 
+        public CliVerbArgumentAttribute(string helpLabel = "") : this(false)
+        {
+            HelpLabel = helpLabel;
+        }
+
         internal CliVerbArgumentAttribute(bool isempty) : base(isempty) 
         {
         }

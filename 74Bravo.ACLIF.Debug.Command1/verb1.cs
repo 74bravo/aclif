@@ -13,7 +13,7 @@ namespace _74Bravo.ACLIF.Debug.Command1
 
         public override string Description => "Verb1 Description";
 
-        public override string Help => "Verb1 Help";
+        public override string HelpFormat => "{0} {1}";
 
         protected override ICliVerbResult Execute(string[] args)
         {

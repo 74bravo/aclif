@@ -16,6 +16,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Help\EmptyHelpItem.cs" />
+    <Compile Remove="Log\ConsoleLogger.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\..\Users\RyanMillett\OneDrive - 74 Bravo\Logos\74Bravo Logo Images\Standard Pack\74 Bravo Nuget Gravatar.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -24,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
     <PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
   </ItemGroup>
 

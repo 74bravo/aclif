@@ -10,23 +10,15 @@ using System.Threading.Tasks;
 
 namespace ACLIF
 {
-    public abstract class CLIModule : CliVerb, ICliModule
+    public abstract class CliModule : CliVerb, ICliModule
     {
-
-        private IEnumerable<ICliVerb>? _cliVerbs;
-        public IEnumerable<ICliVerb> CliVerbs => 
-            _cliVerbs ??= (GetHelpVerb().Concat(GetVerbs()));
-
-        private IEnumerable<ICliVerb> GetHelpVerb ()
-        {
-            yield return new HelpVerb(Description, Help);
-        }
 
         public virtual string Module => 
             !ModuleAttribute.IsEmpty 
             ? ModuleAttribute.Module 
             : throw new NotImplementedException("Module property must be implemented or use CliModule Attribute");
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public override sealed string Verb => Module;
 
         public override string Description => 
@@ -34,22 +26,21 @@ namespace ACLIF
             ? ModuleAttribute.Description 
             : throw new NotImplementedException("Description property must be implemented or use CliModule Attribute");
 
-        public override string Help => 
+        public override string HelpFormat => 
             !ModuleAttribute.IsEmpty 
-            ? ModuleAttribute.HelpText 
+            ? ModuleAttribute.HelpFormat 
             : throw new NotImplementedException("Help property must be implemented or use CliModule Attribute");
+
+        public override string HelpLabel =>
+             !ModuleAttribute.IsEmpty
+            ? String.IsNullOrEmpty(ModuleAttribute.HelpLabel)
+            ? ModuleAttribute.Module
+            : ModuleAttribute.HelpLabel
+            : Module;
 
         private CliModuleAttribute? _moduleAttribute;
         protected CliModuleAttribute ModuleAttribute => 
             _moduleAttribute ??= GetType().GetCustomAttribute<CliModuleAttribute>() ?? CliModuleAttribute.Empty;
-
-
-        protected abstract IEnumerable<ICliVerb> GetVerbs();
-        //{
-
-        //    yield break;
-        //}
-
 
         internal override void PreExecute(string[] args) => ModulePreExecute(args);
 
@@ -70,33 +61,33 @@ namespace ACLIF
             return VerbResult.NoAction();
         }
 
-        public override ICliVerbResult ExecuteWhenHandles(string[] args)
-        {
-            //TODO  : Implement MultiThreaded Processing.
+        //public override ICliVerbResult ExecuteWhenHandles(string[] args)
+        //{
+        //    //TODO  : Implement MultiThreaded Processing.
 
 
-            ICliVerbResult? result = null;
+        //    ICliVerbResult? result = null;
 
-            var nextVerbArgs = ProcessCommandArguments(args);
+        //    var nextVerbArgs = ProcessCommandArguments(args);
 
-            PreExecute(args);
+        //    PreExecute(args);
 
-            foreach (ICliVerb verb in CliVerbs)
-            {
-                if (verb.HandlesCommand(nextVerbArgs))
-                {
-                    result = verb.ExecuteWhenHandles(nextVerbArgs);
-                    //if (result.CommandHandled) return result;
-                    break;
-                }
-            }
+        //    foreach (ICliVerb verb in CliVerbs)
+        //    {
+        //        if (verb.HandlesCommand(nextVerbArgs))
+        //        {
+        //            result = verb.ExecuteWhenHandles(nextVerbArgs);
+        //            //if (result.CommandHandled) return result;
+        //            break;
+        //        }
+        //    }
 
-            result = result ?? Execute(nextVerbArgs);
+        //    result = result ?? Execute(nextVerbArgs);
 
-            PostExecute(args);
+        //    PostExecute(args);
 
-            return result;
+        //    return result;
 
-        }
+        //}
     }
 }

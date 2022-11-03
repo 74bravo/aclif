@@ -26,6 +26,10 @@ namespace ACLIF.Attributes
             get { return _verb; }
         }
 
+        protected override string DefaultHelpFormat => "  {0}\t\t{1}";
+
+        public override string[] HelpArguments => new string[] { Verb, Description };
+
         private static CliVerbAttribute? _empty;
         public static CliVerbAttribute Empty => _empty ??= new CliVerbAttribute(isempty:true);
 

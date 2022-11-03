@@ -19,7 +19,7 @@ namespace _74Bravo.ACLIF.Debug.Command2
     }
 
 
-    [CliVerb("verb2",Description = "Verb2 Description", HelpText = "Verb2 Help")]
+    [CliVerb("verb2",Description = "Verb2 Description")]
     public class verb2 : CliVerb
     {
         //public override string verb => "verb2";
@@ -42,13 +42,13 @@ namespace _74Bravo.ACLIF.Debug.Command2
         public DateOnly opt4 { get; set; }
 
         [CliVerbOption(longName: "--opt5")]
-        public DirectoryInfo opt5 { get; set; }
+        public DirectoryInfo? opt5 { get; set; }
 
         [CliVerbArgument]
-        public DirectoryInfo Arg1 { get; set; }
+        public DirectoryInfo? Arg1 { get; set; }
 
         [CliVerbArgument]
-        public string Arg2 { get; set; }
+        public string? Arg2 { get; set; }
 
         //[CliVerbArgument]
         //public string Arg2 { get; set; }

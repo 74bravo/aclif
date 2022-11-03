@@ -1,4 +1,5 @@
 ﻿using ACLIF.Attributes;
+using ACLIF.Help;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace ACLIF
         {
            // Console.WriteLine($"Instantiating {this.GetType().FullName}");
         }
+
         public virtual string Verb => 
             !VerbAttribute.IsEmpty 
             ? VerbAttribute.Verb 
@@ -25,33 +27,83 @@ namespace ACLIF
             ? VerbAttribute.Description 
             : throw new NotImplementedException("Description property must be implemented or use CliVerb Attribute");
 
-        public virtual string Help => 
+        public virtual string HelpFormat => 
             !VerbAttribute.IsEmpty 
-            ? VerbAttribute.HelpText 
-            : throw new NotImplementedException("Help property must be implemented or use CliVerb Attribute");
+            ? VerbAttribute.HelpFormat 
+            : throw new NotImplementedException("HelpFormat property must be implemented or use CliVerb Attribute");
 
-        public string[] Arguments { get; protected set; }
+        public virtual string HelpLabel =>
+             !VerbAttribute.IsEmpty 
+            ? String.IsNullOrEmpty(VerbAttribute.HelpLabel)
+            ? VerbAttribute.Verb
+            : VerbAttribute.HelpLabel
+            : Verb;
+
+
+        private IEnumerable<ICliVerb>? _cliVerbs;
+        public IEnumerable<ICliVerb> CliVerbs =>
+            _cliVerbs ??= GetHelpVerb().Concat(GetBuiltInVerbs()).Concat(GetInheritedVerbs()).Concat(GetVerbs()).SetParents(this);
+
+        //Todo  Initialize Verb Parents
+
+        protected virtual IEnumerable<ICliVerb> GetVerbs()
+        {
+            yield break;
+        }
+
+        private IEnumerable<ICliVerb> GetHelpVerb()
+        {
+            yield return new HelpVerb(this);
+        }
+
+        internal virtual IEnumerable<ICliVerb> GetBuiltInVerbs()
+        {
+            yield break;
+        }
+
+        protected virtual IEnumerable<ICliVerb> GetInheritedVerbs()
+        {
+            yield break;
+        }
+
+        public string[]? Arguments { get; protected set; }
 
         public virtual ICliVerbResult ExecuteWhenHandles(string[] args)
         {
+            //TODO  : Implement MultiThreaded Processing.
+
+
+            ICliVerbResult? result = null;
+
             var nextVerbArgs = ProcessCommandArguments(args);
 
             PreExecute(args);
 
-            var result = Execute(nextVerbArgs);
+            foreach (ICliVerb verb  in CliVerbs)
+            {
+                if (verb.HandlesCommand(nextVerbArgs))
+                {
+                    result = verb.ExecuteWhenHandles(nextVerbArgs);
+                    //if (result.CommandHandled) return result;
+                    break;
+                }
+            }
+
+            result = result ?? Execute(nextVerbArgs);
 
             PostExecute(args);
 
             return result;
+
         }
 
         internal virtual void PreExecute(string[] args) => VerbPreExecute(args); 
 
-        protected virtual void VerbPreExecute(string[] args) {}
+        protected virtual void VerbPreExecute(string[] args) { }
 
         internal virtual void PostExecute(string[] args) => VerbPostExecute(args);
 
-        protected virtual void VerbPostExecute(string[] args) {}
+        protected virtual void VerbPostExecute(string[] args) { }
 
         public virtual bool HandlesCommand(string[] args)
         {
@@ -63,42 +115,20 @@ namespace ACLIF
         }
 
         private CliVerbAttribute? _verbAttribute;
-        protected CliVerbAttribute VerbAttribute
-        {
-            get
-            {
-                return _verbAttribute ??= GetType().GetCustomAttribute<CliVerbAttribute>() ?? CliVerbAttribute.Empty;
-            }
-        }
-
-        //private IEnumerable<ArgMembers>? _argMembers;
-        //private IEnumerable<ArgMembers> argMembers
-        //{ get { return _argMembers ??= getArgMembers(); } }
+        protected CliVerbAttribute VerbAttribute =>
+            _verbAttribute ??= GetType().GetCustomAttribute<CliVerbAttribute>() ?? CliVerbAttribute.Empty;
 
 
-        //private class ArgProperty
-        //{
-        //    public PropertyInfo pi;
-        //    public CliVerbArgumentAttribute arg;
-
-        //    public ArgProperty(PropertyInfo pi, CliVerbArgumentAttribute arg)
-        //    {
-        //        this.pi = pi;
-        //        this.arg = arg;
-        //    }
-
-        //}
-
-        private class ArgumentProperty : ArgProperty<CliVerbArgumentAttribute> 
+        public class ArgumentProperty : ArgProperty<CliVerbArgumentAttribute> 
             { internal ArgumentProperty(PropertyInfo pi, CliVerbArgumentAttribute arg) : base(pi, arg) { } }
 
-        private class OptionProperty : ArgProperty<CliVerbOptionAttribute>
+        public class OptionProperty : ArgProperty<CliVerbOptionAttribute>
         { internal OptionProperty(PropertyInfo pi, CliVerbOptionAttribute arg) : base(pi, arg) { } }
 
-        private class SwitchProperty : ArgProperty<CliVerbSwitchAttribute>
+        public class SwitchProperty : ArgProperty<CliVerbSwitchAttribute>
         { internal SwitchProperty(PropertyInfo pi, CliVerbSwitchAttribute arg) : base(pi, arg) { } }
 
-        private abstract class ArgProperty <T> where T : CliVerbArgumentAttribute
+        public abstract class ArgProperty <T> where T : CliVerbArgumentAttribute
         {
             public PropertyInfo pi;
             public T arg;
@@ -120,6 +150,26 @@ namespace ACLIF
         private List<ArgumentProperty>? _ArgDictionary;
         private List<ArgumentProperty> ArgDictionary => _ArgDictionary ??= new List<ArgumentProperty>();
 
+        public virtual string[] HelpArguments => new[] {Verb, Description} ;
+
+        public virtual bool Hidden => false;
+
+        private IEnumerable<IHelper>? _helpLoggers;
+        public IEnumerable<IHelper> HelpLoggers =>
+            _helpLoggers ??= GetHelpLoggers();
+
+        public IHelpItem? ParentHelpItem { get; set; }
+
+        IEnumerable<SwitchProperty> ICliVerb.Switches => SwitchDictionary.Values;
+
+        IEnumerable<OptionProperty> ICliVerb.Options => OptionDictionary.Values;
+
+        IEnumerable<ArgumentProperty> ICliVerb.Arguments => ArgDictionary;
+
+        protected virtual IEnumerable<IHelper> GetHelpLoggers()
+        {
+            yield break;
+        }
 
         private bool _argMembersLoaded = false;
         private void LoadArgMembers()
@@ -129,6 +179,9 @@ namespace ACLIF
                 foreach (MemberInfo property in this.GetType().GetProperties())
                 {
                     var vArg = property.GetCustomAttribute<CliVerbArgumentAttribute>() ?? CliVerbArgumentAttribute.Empty;
+
+                    //Setting ParentHelpItem
+                    vArg.ParentHelpItem = this;
 
                     if (!vArg.IsEmpty)
                     {
@@ -169,14 +222,14 @@ namespace ACLIF
             {
                 arg = Arguments[i].Trim(' ').ToLower();
 
-                switch (arg)
-                {
-                    case "-h":
-                    case "--help":
-                    case "-?":
-                    case "/?":
-                        return new string[] { "--help" };
-                }
+                //switch (arg)
+                //{
+                //    case "-h":
+                //    case "--help":
+                //    case "-?":
+                //    case "/?":
+                //        return new string[] { "--help" };
+                //}
 
                 LoadArgMembers();
 
@@ -219,14 +272,14 @@ namespace ACLIF
         private bool ProcessOptionLongName(string arg, string[] args, ref int index)
         {
             // Use this if additional processing is required for longnames.
-            Console.WriteLine($"Processing Arg {arg}");
+            Log.Trace($"Processing Arg {arg}");
             return ProcessOption(arg, args, ref index);
         }
 
         private bool ProcessOptionShortCut(string arg, string[] args, ref int index)
         {
             // Use this if additional processing is required for shortcuts.
-            Console.WriteLine($"Processing Arg Shortcut {arg}");
+            Log.Trace($"Processing Arg Shortcut {arg}");
             return ProcessOption(arg, args, ref index);
         }
 
@@ -269,6 +322,42 @@ namespace ACLIF
         }
 
         protected abstract ICliVerbResult Execute(string[] args);
+        
+        public virtual void Help (int depth)
+        {
+            if (!Hidden)
+            {
+                LoadArgMembers();
 
+                //Description:
+                this.LogDescription();
+
+                if (this is ICliRoot)
+                {
+
+                    ((ICliRoot)this)
+                        .LogRootUsage()
+                        .LogRootOptions()
+                        .LogRootArguments()
+                        .LogRootMethods();
+                }
+                else if (this is ICliModule)
+                {
+                    ((ICliModule)this)
+                        .LogModuleUsage()
+                        .LogModuleOptions()
+                        .LogModuleArguments()
+                        .LogModuleVerbs();
+                }
+                else
+                {
+                    ((ICliVerb)this)
+                        .LogVerbUsage()
+                        .LogVerbOptions()
+                        .LogVerbArguments()
+                        .LogVerbSubVerbs();
+                }
+            }
+        }
     }
 }
