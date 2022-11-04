@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "74Bravo.ACLIF.Debug": {
-      "commandName": "Project",
-      "commandLineArgs": "--debug module2 verb2 --help\r\n"
-    }
-  }
-}
