@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>aclif</RootNamespace>
+    <!--<ImplicitUsings>enable</ImplicitUsings>-->
+    <Nullable>enable</Nullable>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <Title>Another Command Line Interface Framework (aclif)</Title>
+    <Version>0.1.0-Preview</Version>
+    <Company>74 Bravo, LLC.</Company>
+    <Authors>Ryan V. Millett</Authors>
+    <Description>Another Command Line Interface Framework (aclif)</Description>
+    <PackageIcon>74 Bravo Nuget Gravatar.png</PackageIcon>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Help\EmptyHelpItem.cs" />
+    <Compile Remove="Logging\ConsoleLogger.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <None Include="74 Bravo Nuget Gravatar.png">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+	  </None>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
+  </ItemGroup>
+
+</Project>
