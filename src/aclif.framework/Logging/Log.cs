@@ -30,6 +30,12 @@ namespace aclif
                 StandardIO.WriteLine($"DEBUG: {msg}");
         }
 
+        public static void Debug(string format, object[] args)
+        {
+            if (Debugging)
+               Debug (String.Format(format,args));
+        }
+
         public static void Information(string msg)
         {
             if (Verbosity >= Verbosity.Normal)

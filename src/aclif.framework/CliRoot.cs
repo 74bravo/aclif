@@ -126,8 +126,8 @@ namespace aclif // Note: actual namespace depends on the project name.
 
         protected override ICliVerbResult Execute(string[] args)
         {
-            // do nothing for now...
-            return VerbResult.NoAction();
+            if (Shell.IsOpen) return VerbResult.NoAction();
+            return Shell.Launch("ACLIF", ExecuteWhenHandles);
         }
 
         internal sealed override void PostExecute(string[] args)

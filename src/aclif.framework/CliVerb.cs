@@ -77,21 +77,31 @@ namespace aclif
 
             var nextVerbArgs = ProcessCommandArguments(args);
 
-            PreExecute(args);
+            PreExecute(nextVerbArgs);
 
-            foreach (ICliVerb verb  in CliVerbs)
+            if (nextVerbArgs.Length > 0)
             {
-                if (verb.HandlesCommand(nextVerbArgs))
+
+                foreach (ICliVerb verb in CliVerbs)
                 {
-                    result = verb.ExecuteWhenHandles(nextVerbArgs);
-                    //if (result.CommandHandled) return result;
-                    break;
+                    if (verb.HandlesCommand(nextVerbArgs))
+                    {
+                        result = verb.ExecuteWhenHandles(nextVerbArgs);
+                        //if (result.CommandHandled) return result;
+                        break;
+                    }
                 }
+                result = result ?? VerbResult.Exception(new ArgumentException("Unknown Arguments Provided"));
+            }
+            else
+            {
+                //Running Shell
+
+                result = result ?? Execute(nextVerbArgs);
+
             }
 
-            result = result ?? Execute(nextVerbArgs);
-
-            PostExecute(args);
+            PostExecute(nextVerbArgs);
 
             return result;
 
@@ -209,8 +219,10 @@ namespace aclif
 
         public string[] ProcessCommandArguments(string[] args)
         {
+            
             Arguments = args;
             // Skip the arg for the current verb if it's not the root verb.
+            //TODO check to see if root...
             if (!string.IsNullOrEmpty(this.Verb) )
             {
                Arguments = Arguments.Length > 1 ? Arguments.Skip(1).ToArray() : new String[] { };
@@ -218,6 +230,8 @@ namespace aclif
 
             string arg;
             int i = 0;
+            int Lasti = i;
+            bool handled = true;
             for (i = 0; i < Arguments.Length; i++)
             {
                 arg = Arguments[i].Trim(' ').ToLower();
@@ -235,19 +249,33 @@ namespace aclif
 
                 if (arg.StartsWith("--"))
                 {
-                    if (!ProcessOptionLongName(arg, Arguments, ref i)) break;
+                    handled = ProcessOptionLongName(arg, Arguments, ref i);
                 }
                 else if (arg.StartsWith("-"))
                 {
-                    if (!ProcessOptionShortCut(arg, Arguments, ref i)) break;
+                    handled = ProcessOptionShortCut(arg, Arguments, ref i);
                 }
                 else
                 {
-                    if (!ProcessArgument(arg, Arguments, ref i)) break;
+                    handled = ProcessArgument(arg, Arguments, ref i);
                 }
+
+                if (!handled) break;
+
+                Lasti = i;
             }
 
-            Arguments = i > 0 ? Arguments.Skip(i).ToArray() : Arguments;
+            if (handled)
+            {
+                Arguments = i > 1 ? Arguments.Skip(Lasti).ToArray() : new String[] { };
+            }
+            else
+            {
+                Arguments = i > 0 ? Arguments.Skip(i).ToArray() : Arguments;
+            }
+
+
+
 
             return Arguments;
         }

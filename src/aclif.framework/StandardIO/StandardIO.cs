@@ -153,6 +153,14 @@ namespace aclif
 
         #region Static WriteLine
 
+        public static void NewLine(int count = 1)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Console.Write(Environment.NewLine);
+            }
+        }
+
         public static void WriteLine(string text)
         {
             Instance.ioWriteLine(text);

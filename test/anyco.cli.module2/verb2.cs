@@ -62,7 +62,7 @@ namespace _74Bravo.aclif.Debug.Command2
             //    Console.WriteLine($"Verb 2 Arg: {arg}");
             //}
 
-            TestInt = 5;
+             TestInt = 5;
 
             var temp = TestInt;
 
