@@ -26,17 +26,21 @@ namespace aclif
 
             class PartDefinitionComparer : IEqualityComparer<ComposablePartDefinition>
             {
-                public bool Equals(ComposablePartDefinition x, ComposablePartDefinition y) => x.ToString() == y.ToString();
-                public int GetHashCode([DisallowNull] ComposablePartDefinition obj) => obj != null ? obj.ToString().GetHashCode() : string.Empty.GetHashCode();
+                public bool Equals(ComposablePartDefinition? x, ComposablePartDefinition? y)
+                    => x != null && y != null &&  x.ToString() == y.ToString();
+                public int GetHashCode(ComposablePartDefinition? obj)
+                {
+                    return obj == null ? string.Empty.GetHashCode() : obj.ToString().GetHashCode();
+                }
             }
 
             class PartDefinitionTupleComparer : IEqualityComparer<Tuple<ComposablePartDefinition, ExportDefinition>>
             {
-                public bool Equals(Tuple<ComposablePartDefinition, ExportDefinition> x
-                                 , Tuple<ComposablePartDefinition, ExportDefinition> y)
-                    => x.Item1.ToString() == y.Item1.ToString();
+                public bool Equals(Tuple<ComposablePartDefinition, ExportDefinition>? x
+                                 , Tuple<ComposablePartDefinition, ExportDefinition>? y)
+                    => x?.Item1 != null && y?.Item1 != null && x.Item1.ToString() == y.Item1.ToString();
                 public int GetHashCode([DisallowNull] Tuple<ComposablePartDefinition, ExportDefinition> obj)
-                    => obj != null ? obj.Item1.ToString().GetHashCode() : string.Empty.GetHashCode();
+                    => obj?.Item1 == null ? string.Empty.GetHashCode() : obj.Item1.ToString().GetHashCode();
             }
 
             public override IQueryable<ComposablePartDefinition> Parts => base.Parts.Distinct(new PartDefinitionComparer());

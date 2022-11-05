@@ -21,49 +21,64 @@ namespace aclif
         public static void Trace(string msg)
         {
             if (Verbosity == Verbosity.Diagnostic)
-                 Console.WriteLine(msg);
+                 StandardIO.WriteLine(msg);
         }
 
         public static void Debug(string msg)
         {
             if (Debugging)
-                Console.WriteLine($"DEBUG: {msg}");
+                StandardIO.WriteLine($"DEBUG: {msg}");
+        }
+
+        public static void Debug(string format, object[] args)
+        {
+            if (Debugging)
+               Debug (String.Format(format,args));
         }
 
         public static void Information(string msg)
         {
             if (Verbosity >= Verbosity.Normal)
-                Console.WriteLine(msg);
+                StandardIO.WriteLine(msg);
         }
 
         public static void Warning(string msg)
         {
             if (Verbosity >= Verbosity.Normal)
-                Console.WriteLine($"WARNING: {msg}");
+                StandardIO.WriteLine($"WARNING: {msg}");
         }
 
         public static void Error( string msg, Exception ex)
         {
             //Always Logging an Error
 
-            Console.WriteLine($"ERROR: {msg}");
-            Console.WriteLine(ex.InnerException?.Message ?? string.Empty);
+            StandardIO.WriteLine($"ERROR: {msg}");
+            StandardIO.WriteLine(ex.InnerException?.Message ?? string.Empty);
         }
 
         public static void Critical(string msg)
         {
             if (Verbosity >= Verbosity.Minimal)
-                Console.WriteLine($"CRITICAL: {msg}");
+                StandardIO.WriteLine($"CRITICAL: {msg}");
         }
 
         public static void Help(string msg)
         {
-             Console.WriteLine(msg);
+            StandardIO.WriteLine(msg);
+        }
+        public static async Task HelpAsync(string msg)
+        {
+            await StandardIO.WriteLineAsync(msg);
         }
 
         public static void Help(string format, object[] args)
         {
-            Console.WriteLine(format, args);
+            StandardIO.WriteLine(format, args);
+        }
+
+        public static async Task HelpAsync(string format, object[] args)
+        {
+            await StandardIO.WriteLineAsync(format, args);
         }
 
     }

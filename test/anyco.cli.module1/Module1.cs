@@ -15,7 +15,14 @@ namespace _74Bravo.aclif.Debug.Command1
 
         protected override IEnumerable<ICliVerb> GetVerbs()
         {
-            yield break;
+            yield return new verb1();
+        }
+
+        protected override ICliVerbResult Execute(string[] args)
+        {
+            Log.Debug("Executing Module 1");
+
+            return base.Execute(args);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace aclif
 {
     public class VerbResult : ICliVerbResult
     {
-        public VerbResult(bool commandHandled, string? message, int resultCode)
+        public VerbResult(bool commandHandled, string message, int resultCode)
         {
             CommandHandled = commandHandled;
             Message = message;
@@ -17,7 +17,7 @@ namespace aclif
 
         public bool CommandHandled { get; private set; } = false;
 
-        public string? Message { get; private set; }
+        public string Message { get; private set; }
 
         public int ResultCode { get; private set; } = 0;
 

@@ -72,26 +72,38 @@ namespace aclif
         {
             //TODO  : Implement MultiThreaded Processing.
 
-
             ICliVerbResult? result = null;
 
             var nextVerbArgs = ProcessCommandArguments(args);
 
-            PreExecute(args);
+            PreExecute(nextVerbArgs);
 
-            foreach (ICliVerb verb  in CliVerbs)
+            if (nextVerbArgs.Length > 0)
             {
-                if (verb.HandlesCommand(nextVerbArgs))
+
+                //TODO:   Implement Async Here....
+
+                foreach (ICliVerb verb in CliVerbs)
                 {
-                    result = verb.ExecuteWhenHandles(nextVerbArgs);
-                    //if (result.CommandHandled) return result;
-                    break;
+
+                    if (verb.HandlesCommand(nextVerbArgs))
+                    {
+                        result = verb.ExecuteWhenHandles(nextVerbArgs);
+                        //if (result.CommandHandled) return result;
+                        break;
+                    }
                 }
+                result = result ?? VerbResult.Exception(new ArgumentException("Unknown Arguments Provided"));
+            }
+            else
+            {
+                //Running Shell
+
+                result = result ?? Execute(nextVerbArgs);
+
             }
 
-            result = result ?? Execute(nextVerbArgs);
-
-            PostExecute(args);
+            PostExecute(nextVerbArgs);
 
             return result;
 
@@ -209,15 +221,20 @@ namespace aclif
 
         public string[] ProcessCommandArguments(string[] args)
         {
+            
             Arguments = args;
             // Skip the arg for the current verb if it's not the root verb.
-            if (!string.IsNullOrEmpty(this.Verb))
+            //TODO check to see if root...
+            if (!(this is ICliRoot))
+            //if (!string.IsNullOrEmpty(this.Verb) )
             {
-                Arguments = Arguments.Skip(1).ToArray();
+               Arguments = Arguments.Length > 1 ? Arguments.Skip(1).ToArray() : new String[] { };
             }
 
             string arg;
             int i = 0;
+            int Lasti = i;
+            bool handled = true;
             for (i = 0; i < Arguments.Length; i++)
             {
                 arg = Arguments[i].Trim(' ').ToLower();
@@ -235,24 +252,40 @@ namespace aclif
 
                 if (arg.StartsWith("--"))
                 {
-                    if (!ProcessOptionLongName(arg, Arguments, ref i)) break;
+                    handled = ProcessOptionLongName(arg, Arguments, ref i);
                 }
                 else if (arg.StartsWith("-"))
                 {
-                    if (!ProcessOptionShortCut(arg, Arguments, ref i)) break;
+                    handled = ProcessOptionShortCut(arg, Arguments, ref i);
                 }
                 else
                 {
-                    if (!ProcessArgument(arg, Arguments, ref i)) break;
+                    handled = ProcessArgument(arg, Arguments, ref i);
                 }
+
+                if (!handled) break;
+
+                Lasti = i;
             }
 
-            Arguments = Arguments.Skip(i).ToArray();
+            if (handled)
+            {
+                Arguments = i > 1 ? Arguments.Skip(Lasti).ToArray() : new String[] { };
+            }
+            else
+            {
+                Arguments = i > 0 ? Arguments.Skip(i).ToArray() : Arguments;
+            }
+
+
+
 
             return Arguments;
         }
 
         private int _nextArgIndex = 0;
+        private bool disposedValue;
+
         private bool ProcessArgument(string arg, string[] args, ref int index)
         {
             if (ArgDictionary.Count == 0) return false;
@@ -358,6 +391,35 @@ namespace aclif
                         .LogVerbSubVerbs();
                 }
             }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~CliVerb()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

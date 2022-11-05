@@ -8,7 +8,7 @@ using static aclif.CliVerb;
 
 namespace aclif
 {
-    public interface ICliVerb:  IHelpItem, IHelper
+    public interface ICliVerb:  IHelpItem, IHelper, IDisposable
     {
         string Verb { get; }
         IEnumerable<ICliVerb> CliVerbs { get; }

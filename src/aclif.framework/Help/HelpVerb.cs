@@ -36,6 +36,8 @@ namespace aclif.Help
 
         public override bool HandlesCommand(string[] args)
         {
+            if (args == null || args.Length == 0)  return false;
+
             var arg = args[0].Trim(' ').ToLower();
 
             switch (arg)

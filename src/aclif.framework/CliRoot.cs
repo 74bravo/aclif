@@ -6,16 +6,19 @@ using aclif.Attributes;
 using System.Reflection;
 using System.Diagnostics.SymbolStore;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using aclif.Shellio;
+using aclif.Host;
 
 namespace aclif // Note: actual namespace depends on the project name.
 {
-    public abstract class CliRoot : CliModule, ICliRoot, IDisposable
+    public class CliRoot : CliModule, ICliRoot, IDisposable
     {
         //private string[] _args;
 
         private bool _isDisposed;
 
-        protected CliRoot()
+        public CliRoot() : base()
         {
             Log.Trace($"Instantiating CLIRoot() from {this.GetType().FullName}");
         }
@@ -34,32 +37,6 @@ namespace aclif // Note: actual namespace depends on the project name.
         private CliModuleLoader? _cliModuleLoader;
         private CliModuleLoader CliModuleLoader =>
             _cliModuleLoader ??= new CliModuleLoader(CliModuleSearchExpression);
-
-        protected static int Go<T> (string[] args) where T : CliRoot, new()
-        {
-            ICliVerbResult result;
-            try
-            {
-                result = new T().ExecuteWhenHandles(args);
-            }
-            catch (Exception ex)
-            {
-               result = VerbResult.Exception(ex);
-            }
-            finally
-            {
-              
-            }
-            Console.WriteLine(result.Message);
-            return result.ResultCode;
-        }
-
-        //public override ICliVerbResult Execute(string[] args)
-        //{
-        //  //  throw new NotImplementedException();
-        //  // No action at this level..
-
-        //}
 
         public sealed override string Module => "";
 
@@ -99,23 +76,31 @@ namespace aclif // Note: actual namespace depends on the project name.
             }
         }
 
+        internal override IEnumerable<ICliVerb> GetBuiltInVerbs()
+        {
+            yield return new ExitVerb();
+            yield return new NativeCommandsVerb();
+        }
+
         internal sealed override void PreExecute(string[] args)
         {
-
             Log.Verbosity = this.Verbosity;
-           
             if (this.Debugging) ConfigureDebugging();
-
             RootPreExecute(args);
         }
 
+        private bool _debugStarted = false;
         internal void ConfigureDebugging()
         {
+            if (!_debugStarted) 
+            { 
+                _debugStarted = true; 
+
             Log.Information("Initializing Debug Mode");
             Log.Debugging = true;
+            Log.Debug("Started Debug Mode.");
 
-            Log.Debug("Started");
-
+            }
         }
 
         protected virtual void RootPreExecute(string[] args) { }
@@ -126,8 +111,8 @@ namespace aclif // Note: actual namespace depends on the project name.
 
         protected override ICliVerbResult Execute(string[] args)
         {
-            // do nothing for now...
-            return VerbResult.NoAction();
+            if (Shell.IsOpen) return VerbResult.NoAction();
+            return Shell.Launch("ACLIF", ExecuteWhenHandles);
         }
 
         internal sealed override void PostExecute(string[] args)
@@ -141,23 +126,18 @@ namespace aclif // Note: actual namespace depends on the project name.
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected sealed override void ModulePostExecute(string[] args) { }
 
-        protected virtual void Dispose(bool disposing)
+        protected override void Dispose(bool disposing)
         {
             if (this._isDisposed)
                 return;
             if (disposing)
             {
+                this.CliModuleLoader.Dispose();
                 //TODO: Implement other disposing actions.
             }
             this._isDisposed = true;
         }
 
-        public void Dispose()
-        {
-            this.CliModuleLoader.Dispose();
-            this.Dispose(true);
-            GC.SuppressFinalize((object)this);
-        }
-
     }
+
 }
