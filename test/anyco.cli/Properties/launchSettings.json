@@ -2,7 +2,7 @@
   "profiles": {
     "74Bravo.aclif.Debug": {
       "commandName": "Project",
-      "commandLineArgs": "--debug module2 verb2 --help"
+      "commandLineArgs": "--debug module2 verb2"
     }
   }
 }

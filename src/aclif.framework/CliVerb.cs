@@ -211,9 +211,9 @@ namespace aclif
         {
             Arguments = args;
             // Skip the arg for the current verb if it's not the root verb.
-            if (!string.IsNullOrEmpty(this.Verb))
+            if (!string.IsNullOrEmpty(this.Verb) )
             {
-                Arguments = Arguments.Skip(1).ToArray();
+               Arguments = Arguments.Length > 1 ? Arguments.Skip(1).ToArray() : new String[] { };
             }
 
             string arg;
@@ -247,7 +247,7 @@ namespace aclif
                 }
             }
 
-            Arguments = Arguments.Skip(i).ToArray();
+            Arguments = i > 0 ? Arguments.Skip(i).ToArray() : Arguments;
 
             return Arguments;
         }
