@@ -72,7 +72,6 @@ namespace aclif
         {
             //TODO  : Implement MultiThreaded Processing.
 
-
             ICliVerbResult? result = null;
 
             var nextVerbArgs = ProcessCommandArguments(args);
@@ -82,8 +81,11 @@ namespace aclif
             if (nextVerbArgs.Length > 0)
             {
 
+                //TODO:   Implement Async Here....
+
                 foreach (ICliVerb verb in CliVerbs)
                 {
+
                     if (verb.HandlesCommand(nextVerbArgs))
                     {
                         result = verb.ExecuteWhenHandles(nextVerbArgs);
@@ -223,7 +225,8 @@ namespace aclif
             Arguments = args;
             // Skip the arg for the current verb if it's not the root verb.
             //TODO check to see if root...
-            if (!string.IsNullOrEmpty(this.Verb) )
+            if (!(this is ICliRoot))
+            //if (!string.IsNullOrEmpty(this.Verb) )
             {
                Arguments = Arguments.Length > 1 ? Arguments.Skip(1).ToArray() : new String[] { };
             }
@@ -281,6 +284,8 @@ namespace aclif
         }
 
         private int _nextArgIndex = 0;
+        private bool disposedValue;
+
         private bool ProcessArgument(string arg, string[] args, ref int index)
         {
             if (ArgDictionary.Count == 0) return false;
@@ -386,6 +391,35 @@ namespace aclif
                         .LogVerbSubVerbs();
                 }
             }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~CliVerb()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

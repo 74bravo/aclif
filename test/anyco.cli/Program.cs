@@ -11,11 +11,8 @@ namespace anyco.cli
     [CliRoot(Description = "Another CLI Framework Console CLI for Debugging",HelpLabel = "74Bravo.aclif.Debug")]
     public class Program : CliRoot
     {
-
-
-        static int Main(string[] args) => CliRoot.Go<Program>(args);
-
+       static int Main(string[] args) 
+            =>  args.InvokeCli<Program>();
 
     }
-
 }

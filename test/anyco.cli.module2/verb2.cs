@@ -50,7 +50,7 @@ namespace _74Bravo.aclif.Debug.Command2
         [CliVerbArgument]
         public string? Arg2 { get; set; }
 
-        public Session<int> TestInt { get; set; }
+        public Session<int> TestInt { get; set; } = 0;
 
         //[CliVerbArgument]
         //public string Arg2 { get; set; }

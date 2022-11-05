@@ -16,17 +16,15 @@ namespace aclif
 
         private static object Lock = new object();
 
-        public static Guid DefaultSessionId => Guid.Empty;
-
         public static Session? Instance { get; private set; }
         
-        private static Guid DetermineSessionId()
+        private static String DetermineSessionId()
         {
             //ToDo  Create Session Caching Attributes to store values.
             return DefaultSessionId;
         }
 
-        public void StartOrOpen (Guid sessionId, int ttl = 360)
+        public void StartOrOpen (string sessionId, int ttl = 360)
         {
         }
 

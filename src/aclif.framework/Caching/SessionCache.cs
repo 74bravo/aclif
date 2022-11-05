@@ -9,17 +9,20 @@ namespace aclif.Caching
 {
     public class SessionCache : ISerializable, IDisposable
     {
+        public const string DefaultSessionId = "ACLIF-Default-Session";
+        
 
         internal Dictionary<string,object> SessionProperties { get; set; }
 
-        public SessionCache (Guid sessionId)
+        public SessionCache (string sessionId)
         {
             SessionId = sessionId;
+            SessionProperties = new Dictionary<string, object>();
         }
 
-        public SessionCache() : this(Guid.Empty) { }
+        public SessionCache() : this(DefaultSessionId) { }
 
-        public Guid SessionId { get; private set; }
+        public string SessionId { get; private set; }
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {

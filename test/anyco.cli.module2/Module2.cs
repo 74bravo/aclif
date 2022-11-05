@@ -19,5 +19,12 @@ namespace _74Bravo.aclif.Debug.Command2
         {
             yield return new verb2();
         }
+
+        protected override ICliVerbResult Execute(string[] args)
+        {
+            Log.Debug("Executing Module 2");
+
+            return base.Execute(args);
+        }
     }
 }

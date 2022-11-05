@@ -54,6 +54,7 @@ namespace aclif.Shellio
 
                         LastResult = Invoke(args);
 
+                        StandardIO.NewLine();
 
                     } while (commandLine.Trim().ToLower() != exit);
 

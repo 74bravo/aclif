@@ -10,7 +10,7 @@ namespace aclif
     {
         bool CommandHandled { get; }
         int ResultCode { get; }
-        string? Message { get; }
+        string Message { get; }
 
     }
 }
