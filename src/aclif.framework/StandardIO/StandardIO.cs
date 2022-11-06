@@ -46,7 +46,6 @@ namespace aclif
             });
         }
 
-
         internal string ioReadLine()
         {
             lock (ioLock)

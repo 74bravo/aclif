@@ -31,6 +31,11 @@ namespace aclif
 
         public ICliVerbResult ExecuteWhenHandles(string[] args)
         {
+            if (!IsReadyToExecute (args, out string notReadyMessage))
+            {
+                if (string.IsNullOrEmpty(notReadyMessage)) return VerbResult.NoAction();
+                return VerbResult.NoAction(notReadyMessage);
+            }
             return Execute(args);
         }
 
@@ -83,5 +88,11 @@ namespace aclif
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
+        public virtual bool IsReadyToExecute(string[] args, out string notReadyMessage)
+        {
+            notReadyMessage = string.Empty;
+            return true;
+        } 
     }
 }

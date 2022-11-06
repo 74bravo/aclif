@@ -99,6 +99,12 @@ namespace aclif
             {
                 //Running Shell
 
+                if (!IsReadyToExecute(args, out string notReadyMessage))
+                {
+                    if (string.IsNullOrEmpty(notReadyMessage)) return VerbResult.NoAction();
+                    return VerbResult.NoAction(notReadyMessage);
+                }
+
                 result = result ?? Execute(nextVerbArgs);
 
             }
@@ -420,6 +426,13 @@ namespace aclif
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+
+        public virtual bool IsReadyToExecute(string[] args, out string notReadyMesage)
+        {
+            notReadyMesage = string.Empty;
+            //TODO:  Implement Smart Argument Validation when Ready
+            return true;
         }
     }
 }
