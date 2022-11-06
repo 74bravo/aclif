@@ -5,74 +5,78 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace aclif.Help
+namespace aclif
 {
-    internal sealed class HelpVerb : CliSimpleVerb
+
+    public static partial class Help
     {
-
-        //private string _description;
-        //private string _help;
-        private IHelper _helpProvider;
-
-        public HelpVerb(IHelper helpProvider)
+        internal sealed class HelpVerb : CliSimpleVerb
         {
-            _helpProvider = helpProvider;
-        }
 
-        public IHelper HelpProvider => _helpProvider;
+            //private string _description;
+            //private string _help;
+            private IHelper _helpProvider;
 
-        public override string Verb => "--help";
-
-        public override string Description => "Help Handler";
-
-        public override string HelpFormat => "Provides help for commands";
-
-        //public IEnumerable<ICliVerb> CliVerbs { get { yield break; } }
-
-        //public ICliVerbResult ExecuteWhenHandles(string[] args)
-        //{
-        //    return Execute(args);
-        //}
-
-        public override bool HandlesCommand(string[] args)
-        {
-            if (args == null || args.Length == 0)  return false;
-
-            var arg = args[0].Trim(' ').ToLower();
-
-            switch (arg)
+            public HelpVerb(IHelper helpProvider)
             {
-                case "-h":
-                case "--help":
-                case "-?":
-                case "/?":
-                    return true;
-                default:
-                    return false;
+                _helpProvider = helpProvider;
             }
+
+            public IHelper HelpProvider => _helpProvider;
+
+            public override string Verb => "--help";
+
+            public override string Description => "Help Handler";
+
+            public override string HelpFormat => "Provides help for commands";
+
+            //public IEnumerable<ICliVerb> CliVerbs { get { yield break; } }
+
+            //public ICliVerbResult ExecuteWhenHandles(string[] args)
+            //{
+            //    return Execute(args);
+            //}
+
+            public override bool HandlesCommand(string[] args)
+            {
+                if (args == null || args.Length == 0) return false;
+
+                var arg = args[0].Trim(' ').ToLower();
+
+                switch (arg)
+                {
+                    case "-h":
+                    case "--help":
+                    case "-?":
+                    case "/?":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            //public string[] ProcessCommandArguments(string[] args) { }
+            //{
+            //}
+
+            protected override ICliVerbResult Execute(string[] args)
+            {
+
+
+
+
+                HelpProvider.Help(2);
+                return new VerbResult(true, "", 0);
+            }
+
+            //public string GetHelp()
+            //{
+            //    var sb = new StringBuilder();
+            //    sb.AppendLine($"{Verb}\t\t{Description}");
+            //    sb.AppendLine(Help);
+
+            //    return sb.ToString();
+            //}
         }
-
-        //public string[] ProcessCommandArguments(string[] args) { }
-        //{
-        //}
-
-        protected override ICliVerbResult Execute(string[] args)
-        {
-            
-
-
-
-            HelpProvider.Help(2);
-            return new VerbResult(true, "", 0);
-        }
-
-        //public string GetHelp()
-        //{
-        //    var sb = new StringBuilder();
-        //    sb.AppendLine($"{Verb}\t\t{Description}");
-        //    sb.AppendLine(Help);
-
-        //    return sb.ToString();
-        //}
     }
 }

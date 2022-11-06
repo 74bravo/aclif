@@ -7,9 +7,9 @@ using System.Reflection;
 using System.Diagnostics.SymbolStore;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using aclif.Shellio;
+using static aclif.Shell;
 using aclif.Host;
-using aclif.Batching;
+using static aclif.Batch;
 using System.CommandLine.Parsing;
 using System.Diagnostics;
 

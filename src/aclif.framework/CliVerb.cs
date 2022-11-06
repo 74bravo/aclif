@@ -1,5 +1,5 @@
 ﻿using aclif.Attributes;
-using aclif.Help;
+using static aclif.Help;
 using System;
 using System.Collections.Generic;
 using System.Linq;
