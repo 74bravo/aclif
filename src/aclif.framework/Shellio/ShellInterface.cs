@@ -44,7 +44,7 @@ namespace aclif.Shellio
                     do
                     {
                         StandardIO.NewLine();
-                        StandardIO.Write($"{Prompt} {Directory.GetCurrentDirectory()}>");
+                        StandardIO.Write($"{Prompt} {Directory.GetCurrentDirectory()}> ");
                         commandLine = StandardIO.ReadLine();
 
                         Log.Debug("You entered\"{0}\"", new[] { commandLine });

@@ -11,7 +11,7 @@ namespace aclif.Host
     public class NativeCommandsVerb : CliSimpleVerb
     {
 
-        public readonly string[] nativeCommands = { "cmd", "cd", "mkdir", "echo", "dir", "pac" };
+        public readonly string[] nativeCommands = { "cmd", "cd", "mkdir", "echo", "dir", "pac", "git" };
 
         public override string Verb => "cmd";
 
