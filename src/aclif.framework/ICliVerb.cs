@@ -14,6 +14,9 @@ namespace aclif
         IEnumerable<ICliVerb> CliVerbs { get; }
 
         bool HandlesCommand(string[] args);
+
+        bool IsReadyToExecute(string[] args, out string notReadyMesage);
+
         ICliVerbResult ExecuteWhenHandles(string[] args);
 
         string[] ProcessCommandArguments(string[] args);

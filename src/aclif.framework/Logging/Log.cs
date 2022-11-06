@@ -9,14 +9,9 @@ namespace aclif
     public static class  Log
     {
 
-        //private Log() { }
-
         public static Verbosity Verbosity { get; internal set; }
 
         public static bool Debugging { get; internal set; } = false;
-
-
-        //private Log _instance = new Log();
 
         public static void Trace(string msg)
         {

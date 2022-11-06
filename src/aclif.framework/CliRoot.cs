@@ -9,6 +9,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using aclif.Shellio;
 using aclif.Host;
+using aclif.Batching;
+using System.CommandLine.Parsing;
+using System.Diagnostics;
 
 namespace aclif // Note: actual namespace depends on the project name.
 {
@@ -22,6 +25,14 @@ namespace aclif // Note: actual namespace depends on the project name.
         {
             Log.Trace($"Instantiating CLIRoot() from {this.GetType().FullName}");
         }
+
+        public static int Invoke()
+         => Invoke<CliRoot>();
+
+        public static int Invoke<CliRootType>()
+            where CliRootType : ICliRoot, new()
+        => Process.GetCurrentProcess().InvokeCli<CliRootType>();
+
 
         [CliVerbSwitch("--diagnostics", "-d")]
         public bool Diagnostics { get; set; }
@@ -80,6 +91,7 @@ namespace aclif // Note: actual namespace depends on the project name.
         {
             yield return new ExitVerb();
             yield return new NativeCommandsVerb();
+            yield return new BatchVerb(this.ExecuteWhenHandles);
         }
 
         internal sealed override void PreExecute(string[] args)
