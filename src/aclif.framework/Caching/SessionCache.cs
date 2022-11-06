@@ -5,8 +5,11 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace aclif.Caching
+namespace aclif
 {
+    public static partial class Caching
+    { 
+
     public class SessionCache : ISerializable, IDisposable
     {
         public const string DefaultSessionId = "ACLIF-Default-Session";
@@ -35,4 +38,5 @@ namespace aclif.Caching
         }
     }
 
+    }
 }

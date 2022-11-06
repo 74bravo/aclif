@@ -4,33 +4,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace aclif.Help
+namespace aclif
 {
-    public class HelpFactory
-    {
 
-        //IHelpProvider _helpProvider;
-        
-        //StringBuilder _helpSB = new StringBuilder();
+    public static partial class Help {
 
-        //internal HelpFactory (IHelpProvider helpProvider, int depth = 0) 
-        //{
-        //    _helpProvider = helpProvider;
-        //}
+        public class HelpFactory
+        {
 
-        //public static string ItemHelp(IHelpItem helpItem)
-        //{
-        //    return helpItem.ToHelpString();
-        //}
+            //IHelpProvider _helpProvider;
 
-        //public static string ProviderHelp(IHelpItem helpItem)
-        //{
-        //    return helpItem.ToHelpString();
-        //}
+            //StringBuilder _helpSB = new StringBuilder();
 
-        //public static string DeepHelp(IHelpItem helpItem, )
+            //internal HelpFactory (IHelpProvider helpProvider, int depth = 0) 
+            //{
+            //    _helpProvider = helpProvider;
+            //}
+
+            //public static string ItemHelp(IHelpItem helpItem)
+            //{
+            //    return helpItem.ToHelpString();
+            //}
+
+            //public static string ProviderHelp(IHelpItem helpItem)
+            //{
+            //    return helpItem.ToHelpString();
+            //}
+
+            //public static string DeepHelp(IHelpItem helpItem, )
 
 
-
+        }
     }
 }
