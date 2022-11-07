@@ -36,7 +36,16 @@
 
 
   <ItemGroup>
+    <Folder Include="Attributes\" />
     <Folder Include="CliProcess\" />
+    <Folder Include="Help\" />
+    <Folder Include="Logging\" />
+    <Folder Include="StandardIO\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\aclif.interface\aclif.Interface.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\aclif.interface\aclif.Interface.csproj" />
+    <ProjectReference Include="..\aclif.logging\aclif.logging.csproj" />
+    <ProjectReference Include="..\aclif.results\aclif.results.csproj" />
+    <ProjectReference Include="..\aclif.ThirdParty\aclif.ThirdParty.csproj" />
+  </ItemGroup>
+
+</Project>
