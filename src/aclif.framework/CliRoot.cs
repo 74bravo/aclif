@@ -12,6 +12,7 @@ using aclif.Host;
 using static aclif.Batch;
 using System.CommandLine.Parsing;
 using System.Diagnostics;
+using static aclif.Script;
 
 namespace aclif // Note: actual namespace depends on the project name.
 {
@@ -92,6 +93,7 @@ namespace aclif // Note: actual namespace depends on the project name.
             yield return new ExitVerb();
             yield return new NativeCommandsVerb();
             yield return new BatchVerb(this.ExecuteWhenHandles);
+            yield return new ScriptVerb(this.ExecuteWhenHandles);
         }
 
         internal sealed override void PreExecute(string[] args)

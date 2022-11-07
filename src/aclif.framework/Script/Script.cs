@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace aclif
 {
-    public static class Script
+    public static partial class Script
     {
-
-
 
 
 
