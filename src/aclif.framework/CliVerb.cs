@@ -54,6 +54,7 @@ namespace aclif
         private IEnumerable<ICliVerb> GetHelpVerb()
         {
             yield return new HelpVerb(this);
+            yield return new CommentVerb();
         }
 
         internal virtual IEnumerable<ICliVerb> GetBuiltInVerbs()

@@ -11,7 +11,7 @@ namespace aclif
 {
     public static class ICliRootExtensions
     {
-        public static int Invoke(this ICliRoot root, string[] args) 
+        public static int Invoke(this ICliRoot root, string[] args)
         {
             ICliVerbResult result = VerbResult.NoAction();
             try
@@ -33,7 +33,7 @@ namespace aclif
 
         public static int Invoke(this ICliRoot root, string args)
         {
-            string[] argsArray =  CommandLineStringSplitter.Instance
+            string[] argsArray = CommandLineStringSplitter.Instance
                                      .Split(args).ToArray();
 
             return root.Invoke(argsArray);
@@ -46,7 +46,7 @@ namespace aclif
             where CliRootType : ICliRoot, new()
              => new CliRootType().Invoke(args);
 
-        public static int InvokeCli <CliRootType> (this Process process)
+        public static int InvokeCli<CliRootType>(this Process process)
             where CliRootType : ICliRoot, new()
         {
             return process.Args().InvokeCli<CliRootType>();
@@ -57,7 +57,7 @@ namespace aclif
             return process.InvokeCli<CliRoot>();
         }
 
-        public static string[] Args (this Process process)
+        public static string[] Args(this Process process)
         {
             var cl = Environment.CommandLine;
 
@@ -83,7 +83,7 @@ namespace aclif
         public static IEnumerable<t> SkipOrEmptyWhen<t>(this IEnumerable<t> items, int skipCount, bool condition, int orElseSkipCount = 0)
         {
             int i = 1;
-            int _skipCount =  condition? skipCount : orElseSkipCount;
+            int _skipCount = condition ? skipCount : orElseSkipCount;
             foreach (var item in items)
             {
                 if (i > _skipCount) yield return item;
@@ -92,6 +92,30 @@ namespace aclif
             yield break;
         }
 
+        public static string CleanFirstArg(this string[] args)
+        {
+            if (args.Length < 1) return string.Empty;
+            return args[0].Trim(' ').ToLower();
+        }
+
+        public static string CleanFirstArgFirstChars(this string[] args, int charCount = 1)
+        {
+            var arg1 = args.CleanFirstArg();
+            var cnt = charCount <= arg1.Length ? charCount : arg1.Length;
+
+            return args.CleanFirstArg().Substring(0, cnt);
+
+        }
+
+        public static bool FirstArgStartsWith(this string[] args, char chr)
+        {
+            return args.CleanFirstArg().StartsWith(chr);
+        }
+
+        public static bool FirstArgStartsWith(this string[] args, string str)
+        {
+            return args.CleanFirstArg().StartsWith(str);
+        }
 
     }
 }

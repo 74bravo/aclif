@@ -14,14 +14,16 @@ namespace aclif
 
     public static partial class Batch
 
-
     {
+        public delegate ICliVerbResult HandleBatchCommand(string[] args);
+
+
         internal class BatchVerb : CliVerb
         {
 
             public static readonly char[] MultiCommandDelimeters = new[] { ';', '\n' };
 
-            public delegate ICliVerbResult HandleBatchCommand(string[] args);
+
 
             private HandleBatchCommand Invoke;
 
