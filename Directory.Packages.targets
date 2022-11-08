@@ -1,0 +1,303 @@
+﻿<!--
+***********************************************************************************************
+Directory.Packages.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project ToolsVersion="4.0" xmlns='http://schemas.microsoft.com/developer/msbuild/2003' >
+
+
+		<!-- OpenStrataTokenReplace TokenReplace - Used to replace tokens in files.
+		Sample usage.
+		<Target Name='Demo' >
+			<TokenReplace Path="C:\Project\Target.config" Token="$MyToken$" Replacement="MyValue"/>
+		</Target>
+		-->
+
+		<UsingTask TaskName="AclifTokenReplace" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+			<ParameterGroup>
+				<Path ParameterType="System.String" Required="true" />
+				<Token ParameterType="System.String" Required="true" />
+				<Replacement ParameterType="System.String" Required="true" />
+			</ParameterGroup>
+			<Task>
+				<Code Type="Fragment" Language="cs">
+					<![CDATA[
+					string content = File.ReadAllText(Path);
+					content = content.Replace(Token, Replacement);
+					File.WriteAllText(Path, content);
+					]]>
+				</Code>
+			</Task>
+		</UsingTask>
+
+	<UsingTask TaskName="AclifGetTextFileContents" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<TxtFilePath ParameterType="System.String" Required="true"   />
+			<FileTxt ParameterType="System.String" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System.IO"/>
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+				
+					FileTxt = string.Empty;
+
+					if (File.Exists(TxtFilePath))
+					{
+						FileTxt = File.ReadAllText(TxtFilePath);
+					}
+				
+					]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+	<PropertyGroup>
+		<aboutOpenStrataPath>$(MSBuildThisFileDirectory)aboutopenstrata.txt</aboutOpenStrataPath>
+		<openStrataDisclaimerPath>$(MSBuildThisFileDirectory)disclaimer.txt</openStrataDisclaimerPath>
+	</PropertyGroup>
+
+	<Target Name="GetAboutAclifFromTextFile" Condition="Exists('$(aboutAclifPath)')" >
+
+		<OpenStrataGetTextFileContents
+			TxtFilePath="$(aboutAclifPath)"
+			>
+			<Output
+			  TaskParameter="FileTxt"
+			  PropertyName="AboutAclifText"/>
+		</OpenStrataGetTextFileContents>
+
+	</Target>
+
+	<Target Name="GetAclifDisclaimerFromTextFile" Condition="Exists('$(aclifDisclaimerPath)')" >
+
+		<OpenStrataGetTextFileContents
+			TxtFilePath="$(aclifDisclaimerPath)"
+			>
+			<Output
+			  TaskParameter="FileTxt"
+			  PropertyName="aclifDisclaimerText"/>
+		</OpenStrataGetTextFileContents>
+
+	</Target>
+
+	<Target Name="StageReadme" DependsOnTargets="GetAboutAclifFromTextFile;GetPackageDescriptionFromTextFile;GetAclifDisclaimerFromTextFile">
+
+		<Copy SourceFiles="$(MSBuildThisFileDirectory)readme.template.md"
+			   DestinationFiles="readme.md"
+			  />
+
+		<AclifTokenReplace
+			Path="readme.md"
+			Token="$description$"
+			Replacement="$(ReadmeDescription)"
+			/>
+
+		<AclifTokenReplace
+			Path="readme.md"
+			Token="$disclaimer$"
+			Replacement="$(AclifDisclaimerText)"
+			/>		
+		
+		<AclifTokenReplace
+			Path="readme.md"
+			Token="$aboutaclif$"
+			Replacement="$(AboutAclifText)"
+			/>
+
+	</Target>
+
+
+	<Target Name="GetPackageReleaseNotesFromTextFile" Condition="Exists('$(PackageReleaseNotesPath)')"
+			DependsOnTargets="GetAboutAclifFromTextFile;GetAclifDisclaimerFromTextFile">
+
+		<AclifGetTextFileContents
+			TxtFilePath="$(PackageReleaseNotesPath)"
+			>
+			<Output
+			  TaskParameter="FileTxt"
+			  PropertyName="PackageReleaseNotes"/>
+		</AclifGetTextFileContents>
+
+		<PropertyGroup>
+			<PackageReleaseNotes>$(PackageReleaseNotes.Replace('$disclaimer$','$(AclifDisclaimerText)'))</PackageReleaseNotes>
+		</PropertyGroup>
+
+	</Target>
+
+	<Target Name="GetPackageDescriptionFromTextFile" Condition="Exists('$(PackageDescriptionPath)')"
+			DependsOnTargets="GetAboutAclifFromTextFile;GetAclifDisclaimerFromTextFile">
+
+		<OpenStrataGetTextFileContents
+			TxtFilePath="$(PackageDescriptionPath)"
+			>
+			<Output
+			  TaskParameter="FileTxt"
+			  PropertyName="ReadmeDescription"/>
+		</OpenStrataGetTextFileContents>
+
+		<PropertyGroup>
+			<PackageDescription>$(PackageDescription.Replace('$disclaimer$','$(AclifDisclaimerText)').Replace('$aboutaclif $', '$(AboutAclifText)'))</PackageDescription>
+		</PropertyGroup>
+
+	</Target>
+
+	<Target Name="GetPackageSummaryFromTextFile" Condition="Exists('$(PackageSummaryPath)')"
+			DependsOnTargets="GetAboutAclifFromTextFile;GetAclifDisclaimerFromTextFile">
+
+		<OpenStrataGetTextFileContents
+			TxtFilePath="$(PackageSummaryPath)"
+			>
+			<Output
+			  TaskParameter="FileTxt"
+			  PropertyName="PackageDescription"/>
+		</OpenStrataGetTextFileContents>
+
+	</Target>
+
+	<PropertyGroup>
+		<GetPackageMetadataFromFilesDependsOn>
+			GetPackageSummaryFromTextFile;
+			GetPackageReleaseNotesFromTextFile;
+			GetPackageDescriptionFromTextFile;
+			StageReadme;
+			$(GetPackageMetadataFromFilesDependsOn)
+		</GetPackageMetadataFromFilesDependsOn>
+	</PropertyGroup>
+
+
+
+	<!--<Target Name="MoveNugetPackageToLocalPackageFeed" AfterTargets="Pack"
+		 DependsOnTargets="_ProcessGenerateNuspecOutput; $(MoveNugetPackageToLocalPackageFeedDependsOn)"
+   Condition="'$(MSBuildProjectName)' != 'MSBuild.Nuget'"   >-->
+
+	<Target Name="MoveNugetPackageToLocalPackageFeed" AfterTargets="Pack" 
+			 DependsOnTargets="$(MoveNugetPackageToLocalPackageFeedDependsOn)"
+	   Condition="'$(MSBuildProjectName)' != 'MSBuild.Nuget'"   >
+
+		<Copy SourceFiles="$(NugetFileAbsolutePath)"
+			  DestinationFolder="$(LocalPackageFeed)"
+			  SkipUnchangedFiles="true"
+			   Condition="'$(NugetFileAbsolutePath)' != ''" />
+		
+	</Target>
+
+
+
+	<Target Name="_EnsureStrongNameKeyExists" Condition="!Exists('$(AssemblyName).snk')" >
+
+		<Exec Command="$(SNExe) -k $(AssemblyName).snk" />
+
+	</Target>
+
+	<Target Name="SetGitInfoForPackage"
+			Condition="'$(GitInfoImported)' == 'true'"
+			DependsOnTargets="GitInfo">
+
+		<PropertyGroup>
+
+			<RepositoryUrl>$(GitRepositoryUrl)</RepositoryUrl>
+			<RepositoryType>git</RepositoryType>
+			<RepositoryBranch>$(GitBranch)</RepositoryBranch>
+			<RepositoryCommit>$(GitCommit)</RepositoryCommit>
+
+		</PropertyGroup>
+ 
+	</Target>
+
+	<Target Name="SetVersionFromGitInfo"
+			Condition="'$(GitInfoImported)' == 'true'"
+			DependsOnTargets="GitVersion">
+
+		<PropertyGroup>
+			<Version>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)</Version>
+			<PackageVersion>$(Version)$(GitSemVerDashLabel)</PackageVersion>
+		</PropertyGroup>
+
+	</Target>
+
+
+	<Target Name="_CopyDescriptionTemplateIfItDoeNotExist" Condition="!Exists('description.txt')">
+
+		<Copy SourceFiles="$(MSBuildThisFileDirectory)description.template.txt"
+			   DestinationFiles="description.txt"
+			   Condition="!Exists('description.txt')" />
+		
+		<OpenStrataTokenReplace
+			Path="description.txt"
+			Token="$assemblyname$"
+			Replacement="$(AssemblyName)"
+			/>		
+		
+	</Target>
+
+	<Target Name="_CopyReleaseNotesTemplateIfItDoeNotExist" Condition="!Exists('releaseNotes.txt')">
+
+		<Copy SourceFiles="$(MSBuildThisFileDirectory)releaseNotes.template.txt"
+			   DestinationFiles="releaseNotes.txt"
+			   Condition="!Exists('releaseNotes.txt')" />
+
+		<OpenStrataTokenReplace
+			Path="releaseNotes.txt"
+			Token="$assemblyname$"
+			Replacement="$(AssemblyName)"
+			/>
+
+	</Target>
+
+	<Target Name="_CopySummaryTemplateIfItDoeNotExist" Condition="!Exists('summary.txt')">
+
+		<Copy SourceFiles="$(MSBuildThisFileDirectory)summary.template.txt"
+			   DestinationFiles="summary.txt"
+			   Condition="!Exists('summary.txt')" />
+
+		<OpenStrataTokenReplace
+			Path="summary.txt"
+			Token="$assemblyname$"
+			Replacement="$(AssemblyName)"
+			/>
+
+	</Target>
+
+	<PropertyGroup>
+		<PrepareForAclifDevBuildDependsOn>
+			_EnsureStrongNameKeyExists;
+			EnsureDescriptionAndReleaseNotesExist;
+			$(PrepareForAclifDevBuildDependsOn)
+		</PrepareForAclifDevBuildDependsOn>
+	</PropertyGroup>
+
+
+	<Target Name="EnsureDescriptionAndReleaseNotesExist"
+			DependsOnTargets="_CopyDescriptionTemplateIfItDoeNotExist;_CopyReleaseNotesTemplateIfItDoeNotExist;_CopySummaryTemplateIfItDoeNotExist">
+		
+	</Target>
+
+
+	<Target Name="PrepareForAclifDevBuild"
+			DependsOnTargets="$(PrepareForAclifDevBuildDependsOn)">
+	</Target>
+
+	<Target Name="GetOutputItemsFromPackDependsOn" BeforeTargets="_GetOutputItemsFromPack"
+			DependsOnTargets="SetVersionFromGitInfo">
+
+	</Target>
+
+	<Target Name="CheckForCommitBeforePacking"
+			Condition="'$(IsPackable)' == 'true' and '$(GitInfoImported)' == 'true'"
+			DependsOnTargets="_GitRoot" >
+
+		<Warning
+            Text=" There are uncommitted changes.  Please commit changes and rebuild prior to publishing the nuget package."
+            Condition="'$(GitIsDirty)' != '0'" />
+
+	</Target>	
+	
+	
+</Project>

@@ -1,0 +1,11 @@
+
+**About the OpenStrata Initiative**
+
+We believe the Microsoft Power Platform ecosystem benefits from a robust Supply Chain of Production-Ready-To-DDCI Power Platform capabilities.
+
+The OpenStrata Initiative is an open-source project with the explicit objective to facilitate a standardized framework for Publishers and Consumers within the Microsoft Power Platform ecosystem to **Distribute**, **Discover**, **Consume**, and **Integrate** (DDCI) production-ready Power Platform 
+capabilities.
+
+***
+
+Sponsored by [74Bravo LLC](http://www.74bravo.com), the initiative was founded and started in September 2021 by its lead contributor, [Ryan Millett](https://www.linkedin.com/in/ryanmillett).
