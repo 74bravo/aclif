@@ -1,42 +1,40 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.Build.NoTargets/3.1.0">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>aclif</RootNamespace>
     <!--<ImplicitUsings>enable</ImplicitUsings>-->
     <Nullable>enable</Nullable>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <Title>Another Command Line Interface Framework (aclif)</Title>
+
+    <Title>Another Command Line Interface Framework (aclif) Framework</Title>
     <Version>0.1.0-Preview</Version>
-    <Company>74 Bravo, LLC.</Company>
-    <Authors>Ryan V. Millett</Authors>
+
     <Description>Another Command Line Interface Framework (aclif)</Description>
-    <PackageIcon>74 Bravo Nuget Gravatar.png</PackageIcon>
-    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+
+	  <IsPackable>true</IsPackable>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>	  
+
+	  <!--In order for the transitive behavior to work, the development dependency cannot be true.-->
+	  <DevelopmentDependency></DevelopmentDependency>
+	  <IncludeBuildOutput>false</IncludeBuildOutput>
+
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="CliProcess\CommandLine.cs" />
-    <Compile Remove="Help\EmptyHelpItem.cs" />
-    <Compile Remove="Logging\ConsoleLogger.cs" />
-  </ItemGroup>
 
-  <ItemGroup>
-	  <None Include="74 Bravo Nuget Gravatar.png">
-		  <Pack>True</Pack>
-		  <PackagePath>\</PackagePath>
-	  </None>
-  </ItemGroup>
-
-
-  <ItemGroup>
+	    
+	
+<ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
     <PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
   </ItemGroup>
 
 
-  <ItemGroup>
-    <Folder Include="CliProcess\" />
-  </ItemGroup>
+	    
+	
+<ItemGroup>
+  <ProjectReference Include="..\aclif.core.attributes\aclif.core.attributes.csproj" />
+  <ProjectReference Include="..\aclif.core\aclif.core.csproj" />
+</ItemGroup>
 
 </Project>

@@ -13,7 +13,7 @@ namespace _74Bravo.aclif.Debug.Command1
 
         public override string HelpFormat => "{0} - {0}";
 
-        protected override IEnumerable<ICliVerb> GetVerbs()
+        protected override IEnumerable<ICliVerb>  GetModuleVerbs()
         {
             yield return new verb1();
         }

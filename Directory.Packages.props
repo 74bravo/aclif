@@ -1,0 +1,75 @@
+﻿<!--
+***********************************************************************************************
+Directory.Packages.props
+
+WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and have
+          created a backup copy.  Incorrect changes to this file will make it
+          impossible to load or build your projects from the command-line or the IDE.
+
+Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights reserved.
+***********************************************************************************************
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <LocalPackageFeed>C:\DebugPackages</LocalPackageFeed>
+  </PropertyGroup>
+  <PropertyGroup Label="Nuget Packaging Properties">
+    <Authors>ACLIF, OpenStrata, 74Bravo</Authors>
+    <Copyright>Copyright (c) 74Bravo LLC and Contributors. All rights reserved.</Copyright>
+    <Company>74 Bravo, LLC.</Company>
+    <Product>Another Command Line Interface Framework (ACLIF)</Product>
+    <!--<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>-->
+    <PackageLicenseExpression>APSL-2.0</PackageLicenseExpression>
+    <PackageIcon>aclif.png</PackageIcon>
+    <PackageIconUrl />
+    <!--<PackageVersion>$(Version)-Beta</PackageVersion>-->
+    <PackageReleaseNotesPath>releaseNotes.txt</PackageReleaseNotesPath>
+    <PackageDescriptionPath>description.txt</PackageDescriptionPath>
+    <PackageSummaryPath>summary.txt</PackageSummaryPath>
+    <PackageReadmePath>readme.md</PackageReadmePath>
+    <PackageReadmeFile Condition="Exists('$(PackageReadmePath)')">docs\readme.md</PackageReadmeFile>
+    <PackageTags>aclif;cli;command line interface;devops;$(PackageTags)</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)\aclif.png" Condition="Exists('$(MSBuildThisFileDirectory)\aclif.png')">
+      <Pack>true</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)\LICENSE.txt" Condition="Exists('$(MSBuildThisFileDirectory)\LICENSE.txt')">
+      <Pack>true</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="$(PackageDescriptionPath)" Condition="Exists('$(PackageDescriptionPath)')">
+      <Pack>false</Pack>
+    </None>
+    <None Include="$(PackageReleaseNotesPath)" Condition="Exists('$(PackageReleaseNotesPath)')">
+      <Pack>false</Pack>
+    </None>
+    <None Include="$(PackageSummaryPath)" Condition="Exists('$(PackageSummaryPath)')">
+      <Pack>false</Pack>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.11.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="GitInfo" Version="2.2.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="System.ComponentModel.Composition">
+      <Version>6.0.0</Version>
+    </PackageVersion>
+    <PackageVersion Include="System.Linq">
+      <Version>4.3.0</Version>
+    </PackageVersion>
+  </ItemGroup>
+  <PropertyGroup>
+    <!--Setting AfterMicrosoftNETSdkTargets to trigger the importing of Directory.Packages.targets when appropriate.-->
+    <AfterMicrosoftNETSdkTargets>
+			$(AfterMicrosoftNETSdkTargets);
+			$(MSBuildThisFileDirectory)Directory.Packages.targets;
+		</AfterMicrosoftNETSdkTargets>
+  </PropertyGroup>
+</Project>

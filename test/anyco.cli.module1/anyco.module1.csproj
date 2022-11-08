@@ -12,6 +12,7 @@
   </ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\src\aclif.core\aclif.core.csproj" />
 		<ProjectReference Include="..\..\src\aclif.framework\aclif.framework.csproj" />
 	</ItemGroup>
 

@@ -1,0 +1,8 @@
+$disclaimer$
+
+0.3.*-preview
+- These releases are in support of the ACLIF preview phase.  In this phase, the ACLIF packages types are functionally operational, but have not been "field-tested".
+
+0.1.*
+0.2.*:
+- These releases are in support of the ACLIF proof-of-concept phase.
