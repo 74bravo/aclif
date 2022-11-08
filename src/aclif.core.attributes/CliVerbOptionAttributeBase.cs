@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace aclif.Attributes
+namespace aclif
 {
     public abstract class CliVerbOptionAttributeBase : CliVerbArgumentAttribute
     {

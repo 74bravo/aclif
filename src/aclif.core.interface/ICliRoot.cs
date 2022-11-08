@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace aclif
 {
+
+
     public interface ICliRoot : ICliModule
     {
-
-
+        ICliVerbResult ExecuteWhenHandlesDelegate(string[] args);
     }
     public interface ICliRoot <SwitchPropType, OptionPropType, ArgumentPropType> : ICliRoot, ICliModule<SwitchPropType, OptionPropType, ArgumentPropType>
             where ArgumentPropType : IHelpItem, IHelper

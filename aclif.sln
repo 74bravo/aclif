@@ -73,13 +73,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aclif.framework.batching", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aclif.framework.batching.module.batch", "src\aclif.framework.batching.module.batch\aclif.framework.batching.module.batch.csproj", "{73062A55-7A63-486A-9D78-2FC24A8C9020}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aclif.framework.batching.module.batch.script", "src\aclif.framework.batching.module.batch.script\aclif.framework.batching.module.batch.script.csproj", "{990EA02E-236A-4C99-A46A-0EF4AA2C4F60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aclif.framework.batching.module.script", "src\aclif.framework.batching.module.batch.script\aclif.framework.batching.module.script.csproj", "{990EA02E-236A-4C99-A46A-0EF4AA2C4F60}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aclif.framework.module.cmd", "src\aclif.framework.module.cmd\aclif.framework.module.cmd.csproj", "{7F00104E-8283-40B7-AB84-E56C96D1A8FA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aclif.core.help.verb", "src\aclif.core.help.verb\aclif.core.help.verb.csproj", "{7C51E5C2-3F2D-4801-9A62-C388A9627121}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aclif.core.extensions", "src\aclif.core.extensions\aclif.core.extensions.csproj", "{C9705E93-00CC-400C-8350-16A53D3FDC5C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aclif.core.simple", "src\aclif.core.simple\aclif.core.simple.csproj", "{D0580CAA-C65F-4038-8424-019D49049A37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -195,6 +197,10 @@ Global
 		{C9705E93-00CC-400C-8350-16A53D3FDC5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9705E93-00CC-400C-8350-16A53D3FDC5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9705E93-00CC-400C-8350-16A53D3FDC5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0580CAA-C65F-4038-8424-019D49049A37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0580CAA-C65F-4038-8424-019D49049A37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0580CAA-C65F-4038-8424-019D49049A37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0580CAA-C65F-4038-8424-019D49049A37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -227,6 +233,7 @@ Global
 		{7F00104E-8283-40B7-AB84-E56C96D1A8FA} = {22825D8D-6B3D-40DF-96CD-9D904491CD80}
 		{7C51E5C2-3F2D-4801-9A62-C388A9627121} = {22825D8D-6B3D-40DF-96CD-9D904491CD80}
 		{C9705E93-00CC-400C-8350-16A53D3FDC5C} = {22825D8D-6B3D-40DF-96CD-9D904491CD80}
+		{D0580CAA-C65F-4038-8424-019D49049A37} = {22825D8D-6B3D-40DF-96CD-9D904491CD80}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4A52A0AB-EB8E-4218-9E8F-6C2AB281CA2B}

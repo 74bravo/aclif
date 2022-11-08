@@ -15,7 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\aclif.framework\aclif.framework.csproj" />
+    <ProjectReference Include="..\..\src\aclif.framework.batching.module.batch.script\aclif.framework.batching.module.script.csproj" />
+    <ProjectReference Include="..\..\src\aclif.framework.batching.module.batch\aclif.framework.batching.module.batch.csproj" />
+    <ProjectReference Include="..\..\src\aclif.framework.module.cmd\aclif.framework.module.cmd.csproj" />
+    <ProjectReference Include="..\..\src\aclif.framework.module.shell\aclif.framework.module.shell.csproj" />
+    <ProjectReference Include="..\..\src\aclif.framework.root\aclif.framework.root.csproj" />
     <ProjectReference Include="..\anyco.cli.module1\anyco.module1.csproj" />
     <ProjectReference Include="..\anyco.cli.module2\anyco.module2.csproj" />
   </ItemGroup>

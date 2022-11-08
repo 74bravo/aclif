@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace aclif
 {
-    internal interface ICliModuleCollection
+    public interface ICliModuleCollection
     {
         IEnumerable<ICliModule> CliModules { get; }
 

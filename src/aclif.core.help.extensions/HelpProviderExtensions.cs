@@ -13,6 +13,51 @@ namespace aclif.help
     public static class extensions
     {
 
+        #region PrimaryHelpMethods
+
+        public static void ShowHelp<SwitchPropType, OptionPropType, ArgumentPropType>(this IHelpItem helpItem)
+            where ArgumentPropType : IHelpItem, IHelper
+            where OptionPropType : IHelpItem, IHelper
+            where SwitchPropType : IHelpItem, IHelper
+        {
+            if (!helpItem.Hidden)
+                    {
+
+                    //Description:
+                    helpItem.LogDescription();
+
+                        if (helpItem is ICliRoot<SwitchPropType, OptionPropType, ArgumentPropType>)
+                        {
+
+                       ((ICliRoot< SwitchPropType, OptionPropType, ArgumentPropType>)helpItem)
+                        .LogRootUsage()
+                        .LogRootOptions()
+                        .LogRootArguments()
+                        .LogRootMethods();
+                }
+                        else if (helpItem is ICliModule<SwitchPropType, OptionPropType, ArgumentPropType>)
+                        {
+                    ((ICliModule<SwitchPropType, OptionPropType, ArgumentPropType>)helpItem)
+                        .LogModuleUsage()
+                        .LogModuleOptions()
+                        .LogModuleArguments()
+                        .LogModuleVerbs();
+                }
+                        else if (helpItem is ICliVerb<SwitchPropType, OptionPropType, ArgumentPropType>)
+                {
+                    ((ICliVerb<SwitchPropType, OptionPropType, ArgumentPropType>)helpItem)
+                        .LogVerbUsage()
+                        .LogVerbOptions()
+                        .LogVerbArguments()
+                        .LogVerbSubVerbs();
+                }
+                }
+
+        }
+
+        #endregion
+
+
         #region LogHelp General Methods
 
         public static void LogHelp(this IHelpItem helpItem, int depth = 1)

@@ -30,10 +30,11 @@
   </ItemGroup>
 
 
-
-
-  <ItemGroup>
-
-  </ItemGroup>
+	    
+	
+<ItemGroup>
+  <ProjectReference Include="..\aclif.core.attributes\aclif.core.attributes.csproj" />
+  <ProjectReference Include="..\aclif.core\aclif.core.csproj" />
+</ItemGroup>
 
 </Project>

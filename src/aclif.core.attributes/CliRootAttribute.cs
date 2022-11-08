@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using aclif.Attributes;
 
-namespace aclif.Attributes
+namespace aclif
+
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class CliRootAttribute : BaseAttribute

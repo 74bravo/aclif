@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 //using aclif.Help;
 
-namespace aclif.Attributes
+namespace aclif
 {
 
     public abstract class BaseAttribute : Attribute, IHelper, IHelpItem

@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace aclif
+namespace aclif.core
 {
     public abstract class CliCoreVerb : ICliVerb<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>
     {
@@ -17,12 +17,31 @@ namespace aclif
         //public IEnumerable<IOptionProperty<CliVerbOptionAttribute>> Options => OptionDictionary.Values;
         //public IEnumerable<IArgumentProperty<CliVerbArgumentAttribute>> Arguments => ArgDictionary;
 
+
+        #region Abstract Methods
+
+        public abstract string Verb { get; }
+        public abstract string HelpFormat { get; }
+        public abstract string HelpLabel { get; }
+        public abstract string Description { get; }
+
+        #endregion
+
+
+        private IEnumerable<ICliVerb>? _cliVerbs;
+
+        public IEnumerable<ICliVerb> CliVerbs =>
+            _cliVerbs ??= GetHelpVerb().Concat(GetCoreVerbs()).SetParents(this);
+
+        protected virtual IEnumerable<ICliVerb> GetCoreVerbs()
+        {
+            yield break;
+        }
+
+
         IEnumerable<ISwitchProperty<CliVerbSwitchAttribute>> ICliVerb<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>.Switches => SwitchDictionary.Values;
         IEnumerable<IOptionProperty<CliVerbOptionAttribute>> ICliVerb<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>.Options => OptionDictionary.Values;
         IEnumerable<IArgumentProperty<CliVerbArgumentAttribute>> ICliVerb<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>.Arguments => ArgDictionary;
-
-
-
 
 
         private CliVerbAttribute? _verbAttribute;
@@ -302,17 +321,7 @@ namespace aclif
             return false;
         }
 
-        #region Abstract Methods
 
-        public abstract string Verb { get; }
-        public abstract IEnumerable<ICliVerb> CliVerbs { get; }
-        public abstract string HelpFormat { get; }
-        public abstract string HelpLabel { get; }
-        public abstract string Description { get; }
-
-
-
-        #endregion
         public virtual string[] HelpArguments => new[] { Verb, Description };
 
         public virtual bool Hidden => false;
@@ -325,42 +334,66 @@ namespace aclif
         //public abstract ICliVerbResult ExecuteWhenHandles(string[] args);
         //public abstract bool HandlesCommand(string[] args);
 
+        private IEnumerable<ICliVerb> GetHelpVerb()
+        {
+            yield return new HelpVerb(this);
+            //
+            // Is implemented 
+            // yield return new CommentVerb();
+            //
+        }
+
         public virtual void Help(int depth)
         {
             if (!Hidden)
             {
                 LoadArgMembers();
 
-                //Description:
-                this.LogDescription();
+                this.ShowHelp<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>();
 
-                if (this is ICliRoot<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>)
-                {
+                ////Description:
+                //this.LogDescription();
 
-                    ((ICliRoot<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>)this)
-                        .LogRootUsage()
-                        .LogRootOptions()
-                        .LogRootArguments()
-                        .LogRootMethods();
-                }
-                else if (this is ICliModule<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>)
-                {
-                    ((ICliModule<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>)this)
-                        .LogModuleUsage()
-                        .LogModuleOptions()
-                        .LogModuleArguments()
-                        .LogModuleVerbs();
-                }
-                else
-                {
-                    ((ICliVerb<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>)this)
-                        .LogVerbUsage()
-                        .LogVerbOptions()
-                        .LogVerbArguments()
-                        .LogVerbSubVerbs();
-                }
+                //if (this is ICliRoot<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>)
+                //{
+
+                //    ((ICliRoot<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>)this)
+                //        .LogRootUsage()
+                //        .LogRootOptions()
+                //        .LogRootArguments()
+                //        .LogRootMethods();
+                //}
+                //else if (this is ICliModule<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>)
+                //{
+                //    ((ICliModule<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>)this)
+                //        .LogModuleUsage()
+                //        .LogModuleOptions()
+                //        .LogModuleArguments()
+                //        .LogModuleVerbs();
+                //}
+                //else
+                //{
+                //    ((ICliVerb<CliVerbSwitchAttribute, CliVerbOptionAttribute, CliVerbArgumentAttribute>)this)
+                //        .LogVerbUsage()
+                //        .LogVerbOptions()
+                //        .LogVerbArguments()
+                //        .LogVerbSubVerbs();
+                //}
             }
         }
+
+
+        //private IEnumerable<IHelper>? _helpLoggers;
+        //public IEnumerable<IHelper> HelpLoggers =>
+        //    _helpLoggers ??= GetHelpLoggers();
+
+        //protected virtual IEnumerable<IHelper> GetHelpLoggers()
+        //{
+        //    yield break;
+        //}
+
+
+
         public virtual bool IsReadyToExecute(string[] args, out string notReadyMesage)
         {
             notReadyMesage = string.Empty;

@@ -9,10 +9,11 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.CommandLine.Parsing;
 using System.Diagnostics;
+using aclif.core;
 
 namespace aclif // Note: actual namespace depends on the project name.
 {
-    public class CliRoot : CliModule, ICliRoot, IDisposable
+    public abstract class CliRoot :   CliCoreRoot //CliModule, ICliRoot, IDisposable
     {
         //private string[] _args;
 
@@ -23,38 +24,24 @@ namespace aclif // Note: actual namespace depends on the project name.
             Log.Trace($"Instantiating CLIRoot() from {this.GetType().FullName}");
         }
 
-        public static int Invoke()
-         => Invoke<CliRoot>();
+        //public static int Invoke()
+        // => Invoke<CliRoot>();
 
         public static int Invoke<CliRootType>()
             where CliRootType : ICliRoot, new()
         => Process.GetCurrentProcess().InvokeCli<CliRootType>();
 
-        public static int InvokeCli(this string[] args)
-            => args.InvokeCli<CliRoot>();
+        //public static int InvokeCli(this string[] args)
+        //    => args.InvokeCli<CliRoot>();
 
-        public static int InvokeCli(this Process process)
-        {
-            return process.InvokeCli<CliRoot>();
-        }
+        //public static int InvokeCli(this Process process)
+        //{
+        //    return process.InvokeCli<CliRoot>();
+        //}
 
 
-        [CliVerbSwitch("--diagnostics", "-d")]
-        public bool Diagnostics { get; set; }
 
-        [CliVerbSwitch("--debug", Hidden = true)]
-        public bool Debugging { get; set; } = false;
 
-        [CliVerbOption("--verbosity", "-v")]
-        public Verbosity Verbosity { get; set; }
-
-        protected virtual string CliModuleSearchExpression => "*.dll";
-
-        private CliModuleLoader? _cliModuleLoader;
-        private CliModuleLoader CliModuleLoader =>
-            _cliModuleLoader ??= new CliModuleLoader(CliModuleSearchExpression);
-
-        public sealed override string Module => "";
 
         public override string Description => 
             !RootAttribute.IsEmpty
@@ -79,70 +66,36 @@ namespace aclif // Note: actual namespace depends on the project name.
         protected CliRootAttribute RootAttribute =>
             _rootAttribute ??= GetType().GetCustomAttribute<CliRootAttribute>() ?? CliRootAttribute.Empty;
 
-        public override bool HandlesCommand(string[] args)
+
+
+
+
+        internal virtual IEnumerable<ICliVerb> GetBuiltInVerbs()
         {
-            return true;
+            yield break;
+          //  yield return new ExitVerb();
+          //  yield return new NativeCommandsVerb();
+          //  yield return new BatchVerb(this.ExecuteWhenHandles);
+          //  yield return new ScriptVerb(this.ExecuteWhenHandles);
         }
 
-        protected override IEnumerable<ICliVerb> GetVerbs()
+        protected sealed override IEnumerable<ICliModule> GetCoreModules()
         {
-            foreach (ICliModule cliModule in CliModuleLoader.Collection.CliModules)
-            {
-                yield return cliModule;
-            }
+            return base.GetCoreModules().Concat(GetModules());
         }
 
-        internal override IEnumerable<ICliVerb> GetBuiltInVerbs()
+        protected virtual IEnumerable<ICliModule> GetModules()
         {
-            yield return new ExitVerb();
-            yield return new NativeCommandsVerb();
-            yield return new BatchVerb(this.ExecuteWhenHandles);
-            yield return new ScriptVerb(this.ExecuteWhenHandles);
+            yield break;
         }
 
-        internal sealed override void PreExecute(string[] args)
-        {
-            Log.Verbosity = this.Verbosity;
-            if (this.Debugging) ConfigureDebugging();
-            RootPreExecute(args);
-        }
-
-        private bool _debugStarted = false;
-        internal void ConfigureDebugging()
-        {
-            if (!_debugStarted) 
-            { 
-                _debugStarted = true; 
-
-            Log.Information("Initializing Debug Mode");
-            Log.Debugging = true;
-            Log.Debug("Started Debug Mode.");
-
-            }
-        }
-
-        protected virtual void RootPreExecute(string[] args) { }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        protected sealed override void ModulePreExecute(string[] args) { }
 
 
-        protected override ICliVerbResult Execute(string[] args)
-        {
-            if (Shell.IsOpen) return VerbResult.NoAction();
-            return Shell.Launch("ACLIF", ExecuteWhenHandles);
-        }
 
-        internal sealed override void PostExecute(string[] args)
-        {
-            //TODO:  Implement Root Level Functionality
-            RootPostExecute(args);
-        }
 
-        protected virtual void RootPostExecute(string[] args) { }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        protected sealed override void ModulePostExecute(string[] args) { }
+
+
 
         protected override void Dispose(bool disposing)
         {
@@ -150,8 +103,9 @@ namespace aclif // Note: actual namespace depends on the project name.
                 return;
             if (disposing)
             {
-                this.CliModuleLoader.Dispose();
+
                 //TODO: Implement other disposing actions.
+                base.Dispose(disposing);
             }
             this._isDisposed = true;
         }

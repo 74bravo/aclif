@@ -1,5 +1,8 @@
-﻿using System;
+﻿using aclif.core.simple;
+using aclif.simple;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,14 +11,13 @@ using System.Threading.Tasks;
 
 namespace aclif.Host
 {
-
-    public class NativeCommandsVerb : CliSimpleVerb
+    [Export(typeof(ICliModule))]
+    public class NativeCommandsVerb : CliSimpleModule
     {
 
         public readonly string[] nativeCommands = { "cmd", "cd", "mkdir", "echo", "dir", "pac", "git" };
 
-        public override string Verb => "cmd";
-
+        public override string Module => "cmd";
 
         public override bool HandlesCommand(string[] args)
         {
@@ -24,6 +26,8 @@ namespace aclif.Host
         }
 
         public override string Description => "Used to exectute a native commands";
+
+
 
         private string _instanceCommand = string.Empty;
 

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using aclif.core.attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.Build.Utilities.SDKManifest;
 
 namespace aclif.Attributes
 {
@@ -22,6 +24,18 @@ namespace aclif.Attributes
             }
             yield break;
         }
+
+        public static IEnumerable<RegisterCliShellAttribute> GetRegisterCliShellAttributes(this System.AppDomain domain)
+        {
+            return domain.GetCustomAttributes<RegisterCliShellAttribute>();
+        }
+
+        public static bool TryGetFirstRegisterCliShellAttribute(this System.AppDomain domain, out RegisterCliShellAttribute? registerCliShellAttribute )
+        {
+            registerCliShellAttribute = domain.GetRegisterCliShellAttributes().FirstOrDefault();
+            return registerCliShellAttribute != null;
+        }
+
 
 
 

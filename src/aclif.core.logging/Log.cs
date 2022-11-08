@@ -11,6 +11,12 @@ namespace aclif
 
         public static Verbosity Verbosity { get; internal set; }
 
+
+        public static void SetVerbosity( Verbosity verbosity)
+        {
+            Verbosity = verbosity;
+        }
+
         public static bool Debugging { get; internal set; } = false;
 
         public static void Trace(string msg)
@@ -75,6 +81,26 @@ namespace aclif
         {
             await StandardIO.WriteLineAsync(format, args);
         }
+
+        public static void StartDebugging()
+        {
+
+            Log.Information("Initializing Debug Mode");
+            Debugging = true;
+            Log.Debug("Started Debug Mode.");
+
+        }
+
+        public static void StopDebugging()
+        {
+            Debugging = false;
+        }
+
+        public static void ToggleDebugging()
+        {
+            Debugging = !Debugging;
+        }
+
 
     }
 }

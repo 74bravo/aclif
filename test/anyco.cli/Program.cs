@@ -1,18 +1,18 @@
 ﻿using aclif;
-using aclif.Attributes;
+using aclif.framework;
 using System;
 using System.Runtime.CompilerServices;
-using static aclif.Script;
+//using static aclif.Script;
 
-[assembly: ValidScriptFileExtension(".aclif")]
+//[assembly: ValidScriptFileExtension(".aclif")]
 
 namespace anyco.cli {
 
-    [CliRoot(Description = "Another CLI Framework Console CLI for Debugging", HelpLabel = "74Bravo.aclif.Debug")]
-    public class Program : CliRoot
+   
+    public class Program 
     {
         static int Main()
-             => CliRoot.Invoke<Program>();
+             => Root.Invoke();
 
     }
 

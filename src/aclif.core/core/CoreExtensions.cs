@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace aclif
 {
-    public static class CliClassExtensions
+    public static class CoreExtensions
     {
 
         internal static IEnumerable<ICliVerb> SetParents (this IEnumerable<ICliVerb>  cliVerbs, IHelpItem parent)

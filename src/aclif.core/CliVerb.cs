@@ -1,11 +1,13 @@
 ﻿using aclif.Attributes;
+using aclif.core;
 using aclif.help.Interface;
-using aclif.Help;
+//using aclif.Help;
 using aclif.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Schema;
@@ -46,54 +48,31 @@ namespace aclif
 
         //Todo  Initialize Verb Parents
 
+
+        protected sealed override IEnumerable<ICliVerb> GetCoreVerbs()
+        {
+            return base.GetCoreVerbs().Concat(GetVerbs());
+        }
+
         protected virtual IEnumerable<ICliVerb> GetVerbs()
         {
             yield break;
         }
 
-        private IEnumerable<ICliVerb> GetHelpVerb()
-        {
-            yield return new HelpVerb(this);
-            yield return new CommentVerb();
-        }
 
-        internal virtual IEnumerable<ICliVerb> GetBuiltInVerbs()
-        {
-            yield break;
-        }
+        //internal virtual IEnumerable<ICliVerb> GetBuiltInVerbs()
+        //{
+        //    yield break;
+        //}
 
-        protected virtual IEnumerable<ICliVerb> GetInheritedVerbs()
-        {
-            yield break;
-        }
+        //protected virtual IEnumerable<ICliVerb> GetInheritedVerbs()
+        //{
+        //    yield break;
+        //}
 
         //public string[]? Arguments { get; protected set; }
 
 
-
-
-        private IEnumerable<ICliVerb>? _cliVerbs;
-        public override sealed IEnumerable<ICliVerb> CliVerbs =>
-            _cliVerbs ??= GetHelpVerb().Concat(GetBuiltInVerbs()).Concat(GetInheritedVerbs()).Concat(GetVerbs()).SetParents(this);
-
-
-
-
-
-
-
-        private IEnumerable<IHelper>? _helpLoggers;
-        public IEnumerable<IHelper> HelpLoggers =>
-            _helpLoggers ??= GetHelpLoggers();
-
-
-
-
-
-        protected virtual IEnumerable<IHelper> GetHelpLoggers()
-        {
-            yield break;
-        }
 
         //private bool _argMembersLoaded = false;
         //private void LoadArgMembers()

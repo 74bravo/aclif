@@ -7,12 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Composition" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\aclif.core.attributes\aclif.core.attributes.csproj" />
-    <ProjectReference Include="..\aclif.core.simple\aclif.core.simple.csproj" />
+    <ProjectReference Include="..\aclif.core.extensions\aclif.core.extensions.csproj" />
+    <ProjectReference Include="..\aclif.framework.batching\aclif.framework.batching.csproj" />
   </ItemGroup>
 
 </Project>

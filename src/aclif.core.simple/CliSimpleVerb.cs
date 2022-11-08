@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using aclif.help;
 using aclif.help.Interface;
 
-namespace aclif
+namespace aclif.simple
 {
     public abstract class CliSimpleVerb : ICliVerb, IHelper
     {
@@ -31,7 +31,7 @@ namespace aclif
 
         public ICliVerbResult ExecuteWhenHandles(string[] args)
         {
-            if (!IsReadyToExecute (args, out string notReadyMessage))
+            if (!IsReadyToExecute(args, out string notReadyMessage))
             {
                 if (string.IsNullOrEmpty(notReadyMessage)) return VerbResult.NoAction();
                 return VerbResult.NoAction(notReadyMessage);
@@ -45,7 +45,7 @@ namespace aclif
 
         public virtual string HelpLabel { get; set; } = string.Empty;
 
-        public IHelpItem? ParentHelpItem { get; set; } 
+        public IHelpItem? ParentHelpItem { get; set; }
 
         public virtual string[] HelpArguments => new[] { Verb, Description };
         public virtual bool Hidden => false;
@@ -93,6 +93,6 @@ namespace aclif
         {
             notReadyMessage = string.Empty;
             return true;
-        } 
+        }
     }
 }

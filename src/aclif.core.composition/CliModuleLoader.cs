@@ -11,15 +11,19 @@ using System.Reflection;
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography.X509Certificates;
 using System.Runtime.CompilerServices;
+using aclif.core.interfaces;
 
 namespace aclif
 {
-    internal sealed class CliModuleLoader : IDisposable
+    public sealed class CliModuleLoader : IDisposable
     {
         private readonly AggregateCatalog? _catalog;
         private readonly CompositionContainer? _container;
         [Import(typeof(ICliModuleCollection))]
         private ICliModuleCollection _cliModuleCollection;
+
+        [Import(typeof(ICliShellInterface))]
+        private ICliShellInterface _cliShellInterface;
 
         internal class DistinctAggregateCatalog : AggregateCatalog
         {
@@ -100,6 +104,8 @@ namespace aclif
 #pragma warning restore CS8604 // Possible null reference argument.
 
         public ICliModuleCollection Collection => this._cliModuleCollection;
+
+        public ICliShellInterface ShellInterface => this._cliShellInterface;
 
         public void Dispose()
         {

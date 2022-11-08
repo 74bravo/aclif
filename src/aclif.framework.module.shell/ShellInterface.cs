@@ -1,29 +1,39 @@
-﻿using System;
+﻿using aclif.core.attributes;
+using aclif.core.interfaces;
+using aclif.framework.shell;
+using System;
 using System.Collections.Generic;
 using System.CommandLine.Parsing;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace aclif
+[assembly: RegisterCliShell(typeof(ICliShellInterface))]
+
+namespace aclif.framework.shell
 {
-    public static partial class Shell
-    {
-
-        public delegate ICliVerbResult HandleInput(string[] args);
-
-        public class ShellInterface
+    [Export(typeof(ICliShellInterface))]
+    public class ShellInterface : ICliShellInterface
         {
 
             private object shellLock = new object();
 
-            private HandleInput Invoke;
-            private string Prompt;
+            private ICliShellInterface.HandleInput? Invoke;
+            private string? Prompt;
             public const string exit = "exit";
 
-            internal ShellInterface(string prompt, HandleInput _handleInput)
+            public bool IsOpen { get; private set; }
+
+            public ShellInterface()
+             {
+
+             }
+
+        internal ShellInterface(string prompt, ICliShellInterface.HandleInput _handleInput) : base()
             {
                 Invoke = _handleInput;
                 Prompt = prompt;
@@ -73,8 +83,22 @@ namespace aclif
                     }
                 }
             }
+
+            public ICliVerbResult Launch(string prompt, ICliShellInterface.HandleInput handler)
+            {
+                try { 
+                    Prompt = prompt;
+                    Invoke = handler;
+                    IsOpen = true;
+                    return Start();
+                }
+                finally
+                { 
+                    IsOpen = false;
+                }
+
+            }
         }
 
     }
 
-}

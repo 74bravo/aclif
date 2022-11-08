@@ -1,10 +1,11 @@
-﻿using System;
+﻿using aclif.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace aclif.Attributes
+namespace aclif
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
     public class CliVerbOptionAttribute : CliVerbOptionAttributeBase

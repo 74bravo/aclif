@@ -10,7 +10,7 @@ namespace aclif
 {
    
     [Export(typeof(ICliModuleCollection))]
-    internal class CliModuleCollection : ICliModuleCollection
+    public class CliModuleCollection : ICliModuleCollection
     {
         [ImportMany]
 

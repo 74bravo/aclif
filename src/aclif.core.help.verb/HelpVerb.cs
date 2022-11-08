@@ -1,4 +1,5 @@
 ﻿using aclif.help.Interface;
+using aclif.simple;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace aclif.help
 {
 
-        internal sealed class HelpVerb : CliSimpleVerb
+    public sealed class HelpVerb : CliSimpleVerb
         {
 
             //private string _description;

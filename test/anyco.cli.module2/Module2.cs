@@ -15,7 +15,7 @@ namespace _74Bravo.aclif.Debug.Command2
 
         //public override string Help => "aclif debug test Module 2 HELP";
 
-        protected override IEnumerable<ICliVerb> GetVerbs()
+        protected override IEnumerable<ICliVerb> GetModuleVerbs()
         {
             yield return new verb2();
         }

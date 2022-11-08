@@ -50,7 +50,7 @@ namespace _74Bravo.aclif.Debug.Command2
         [CliVerbArgument]
         public string? Arg2 { get; set; }
 
-        public Session<int> TestInt { get; set; } = 0;
+      //  public Session<int> TestInt { get; set; } = 0;
 
         //[CliVerbArgument]
         //public string Arg2 { get; set; }
@@ -62,11 +62,11 @@ namespace _74Bravo.aclif.Debug.Command2
             //    Console.WriteLine($"Verb 2 Arg: {arg}");
             //}
 
-             TestInt = 5;
+            // TestInt = 5;
 
-            var temp = TestInt;
+            //var temp = TestInt;
 
-            int temp2 = TestInt;
+            //int temp2 = TestInt;
 
            Console.WriteLine("Running Verb 2");
             return VerbResult.Success();
