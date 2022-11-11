@@ -29,6 +29,7 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
     <PackageReadmePath>readme.md</PackageReadmePath>
     <PackageReadmeFile Condition="Exists('$(PackageReadmePath)')">docs\readme.md</PackageReadmeFile>
     <PackageTags>aclif;cli;command line interface;devops;$(PackageTags)</PackageTags>
+    <Version>1.0.2-Preview</Version>
   </PropertyGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)\aclif.png" Condition="Exists('$(MSBuildThisFileDirectory)\aclif.png')">
@@ -56,13 +57,18 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
     <PackageReference Include="GitInfo" Version="2.2.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="System.ComponentModel.Composition" Version="4.5.0">
+      <PrivateAssets>none</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="System.Linq" Version="4.3.0">
+      <PrivateAssets>none</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageVersion Include="System.ComponentModel.Composition">
-      <Version>6.0.0</Version>
-    </PackageVersion>
-    <PackageVersion Include="System.Linq">
-      <Version>4.3.0</Version>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageVersion Include="aclif.core">
+      <Version>1.0.2-Preview</Version>
     </PackageVersion>
   </ItemGroup>
   <PropertyGroup>
@@ -72,4 +78,51 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			$(MSBuildThisFileDirectory)Directory.Packages.targets;
 		</AfterMicrosoftNETSdkTargets>
   </PropertyGroup>
+  <!--Workaround for including project -to -project reference output.-->
+  <PropertyGroup>
+    <!--Setting AfterMicrosoftNETSdkTargets to trigger the importing of Directory.Packages.targets when appropriate.-->
+    <Project2ProjectBuildOutputWorkAroundDependsOn>
+			BuiltProjectOutputGroup;
+			DocumentationProjectOutputGroup;
+			SatelliteDllsProjectOutputGroup;
+			_AddPriFileToPackBuildOutput;
+			$(TargetsForTfmSpecificBuildOutput);
+			$(Project2ProjectBuildOutputWorkAroundDependsOn)
+		</Project2ProjectBuildOutputWorkAroundDependsOn>
+    <TargetsForTfmSpecificBuildOutput>
+			_Project2ProjectBuildOutputWorkAround;
+			$(TargetsForTfmSpecificBuildOutput);
+		</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <Target Name="_Project2ProjectBuildOutputWorkAround" DependsOnTargets="ResolveAssemblyReferences;$(Project2ProjectBuildOutputWorkAroundDependsOn)" Returns="@(BuiltProjectOutputGroupOutput)">
+    <Message Text="--Project2Project" />
+    <Message Text="@(BuiltProjectOutputGroupOutput)" />
+    <ItemGroup>
+      <!-- IncludeRuntimeDependency=true metadata is escape hatch to include a non-copy local reference in deps file as a runtime dependency -->
+      <!--
+			<ReferencePath>
+				<IncludeRuntimeDependency Condition="'%(ReferencePath.IncludeRuntimeDependency)' == '' and '%(ReferencePath.CopyLocal)' == 'true'">true</IncludeRuntimeDependency>
+			</ReferencePath>
+
+			<ReferenceDependencyPaths>
+				<IncludeRuntimeDependency Condition="'%(ReferenceDependencyPaths.IncludeRuntimeDependency)' == '' and '%(ReferenceDependencyPaths.CopyLocal)' == 'true'">true</IncludeRuntimeDependency>
+			</ReferenceDependencyPaths>-->
+      <BuiltProjectOutputGroupOutput Include="@(ReferenceCopyLocalPaths)" />
+      <!--<Project2ProjectBuildOutputs Include="@(ReferenceDependencyPaths->WithMetadataValue('IncludeRuntimeDependency', 'true'))" />-->
+    </ItemGroup>
+  </Target>
+  <!--<Target Name="_GetBuildOutputFilesWithTfm"
+		DependsOnTargets="BuiltProjectOutputGroup;DocumentationProjectOutputGroup;SatelliteDllsProjectOutputGroup;_AddPriFileToPackBuildOutput;$(TargetsForTfmSpecificBuildOutput)"
+		Returns="@(BuildOutputInPackage)">
+		<ItemGroup Condition="'$(IncludeBuildOutput)' == 'true'">
+			<BuildOutputInPackage Include="@(SatelliteDllsProjectOutputGroupOutput);
+                            @(BuiltProjectOutputGroupOutput);
+                            @(DocumentationProjectOutputGroupOutput);
+                            @(_PathToPriFile)"/>
+		</ItemGroup>
+	</Target>-->
+  <!--<Target Name="GenerateNuspec"
+		Condition="'$(IsPackable)' == 'true'"
+		Inputs="@(NuGetPackInput)" Outputs="@(NuGetPackOutput)"
+		DependsOnTargets="$(GenerateNuspecDependsOn)"-->
 </Project>

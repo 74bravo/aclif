@@ -6,12 +6,19 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <PackageReference Include="System.ComponentModel.Composition" />
-  </ItemGroup>
+  </ItemGroup>-->
 
   <ItemGroup>
-    <ProjectReference Include="..\aclif.core.interface\aclif.core.interfaces.csproj" />
+    <ProjectReference Include="..\aclif.core.help.interface\aclif.core.help.Interface.csproj">
+      <Private>True</Private>
+      <IncludeAssets>runtime</IncludeAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.interface\aclif.core.interfaces.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

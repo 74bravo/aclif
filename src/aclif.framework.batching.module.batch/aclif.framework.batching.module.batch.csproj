@@ -4,10 +4,11 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <Title>aclif.framework.batching.module.batch</Title>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\aclif.core.attributes\aclif.core.attributes.csproj" />
     <ProjectReference Include="..\aclif.framework.batching\aclif.framework.batching.csproj" />
   </ItemGroup>
 

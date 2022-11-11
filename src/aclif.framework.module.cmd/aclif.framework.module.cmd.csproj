@@ -1,18 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<Title>aclif.framework.cmd</Title>	  
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Composition" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\aclif.core.attributes\aclif.core.attributes.csproj" />
-    <ProjectReference Include="..\aclif.core.simple\aclif.core.simple.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="aclif.core" Version="1.0.*-*">
+			<PrivateAssets></PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
 
 </Project>

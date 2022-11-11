@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace aclif.help
 {
 
-    public sealed class HelpVerb : CliSimpleVerb
-        {
+    public sealed class HelpVerb : CliSimpleVerb, ICliVerb
+    {
 
             //private string _description;
             //private string _help;
