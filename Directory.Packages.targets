@@ -215,10 +215,10 @@ Copyright (c) 74Bravo LLC and Contributors. All rights reserved.. All rights res
 			Condition="'$(GitInfoImported)' == 'true'"
 			DependsOnTargets="GitVersion">
 
-		<PropertyGroup>
+		<!--<PropertyGroup>
 			<Version>$(GitSemVerMajor).$(GitSemVerMinor).$(GitSemVerPatch)</Version>
 			<PackageVersion>$(Version)$(GitSemVerDashLabel)</PackageVersion>
-		</PropertyGroup>
+		</PropertyGroup>-->
 
 	</Target>
 

@@ -9,11 +9,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\aclif.core.help.interface\aclif.core.help.Interface.csproj" />
-    <ProjectReference Include="..\aclif.core.interface\aclif.core.interfaces.csproj" />
-    <ProjectReference Include="..\aclif.core.logging\aclif.core.logging.csproj" />
-    <ProjectReference Include="..\aclif.core.results\aclif.core.results.csproj" />
-    <ProjectReference Include="..\aclif.core.system.commandline\aclif.core.system.commandline.csproj" />
+    <ProjectReference Include="..\aclif.core.help.interface\aclif.core.help.Interface.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.interface\aclif.core.interfaces.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.logging\aclif.core.logging.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.results\aclif.core.results.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.system.commandline\aclif.core.system.commandline.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

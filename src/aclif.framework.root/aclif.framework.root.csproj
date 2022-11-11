@@ -4,10 +4,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<Title>aclif.framework.root</Title>	  
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\aclif.core\aclif.core.csproj" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="aclif.core" Version="1.0.*-*">
+			<PrivateAssets></PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+	
 </Project>

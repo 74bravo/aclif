@@ -8,9 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\aclif.core.help.extensions\aclif.core.help.extensions.csproj" />
-    <ProjectReference Include="..\aclif.core.help.interface\aclif.core.help.Interface.csproj" />
-    <ProjectReference Include="..\aclif.core.logging\aclif.core.logging.csproj" />
+    <ProjectReference Include="..\aclif.core.help.extensions\aclif.core.help.extensions.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.help.interface\aclif.core.help.Interface.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.interface\aclif.core.interfaces.csproj">
+      <Private>True</Private>
+      <IncludeAssets>runtime</IncludeAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.logging\aclif.core.logging.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

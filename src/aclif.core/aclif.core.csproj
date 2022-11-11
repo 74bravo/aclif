@@ -1,25 +1,85 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>aclif</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>aclif.core</Title>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Linq" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\aclif.core.attributes\aclif.core.attributes.csproj" />
-    <ProjectReference Include="..\aclif.core.composition\aclif.core.composition.csproj" />
-    <ProjectReference Include="..\aclif.core.extensions\aclif.core.extensions.csproj" />
-    <ProjectReference Include="..\aclif.core.help.extensions\aclif.core.help.extensions.csproj" />
-    <ProjectReference Include="..\aclif.core.help.verb\aclif.core.help.verb.csproj" />
-    <ProjectReference Include="..\aclif.core.interface\aclif.core.interfaces.csproj" />
-    <ProjectReference Include="..\aclif.core.logging\aclif.core.logging.csproj" />
-    <ProjectReference Include="..\aclif.core.results\aclif.core.results.csproj" />
+    <ProjectReference Include="..\aclif.core.attributes\aclif.core.attributes.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.composition\aclif.core.composition.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.extensions\aclif.core.extensions.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.help.extensions\aclif.core.help.extensions.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.help.interface\aclif.core.help.Interface.csproj">
+      <Private>True</Private>
+      <IncludeAssets>runtime</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.help.verb\aclif.core.help.verb.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+	  <ProjectReference Include="..\aclif.core.host\aclif.core.host.csproj" >
+		  <Private>True</Private>
+		  <IncludeAssets>runtime</IncludeAssets>
+		  <PrivateAssets>all</PrivateAssets>
+	  </ProjectReference>
+    <ProjectReference Include="..\aclif.core.interface\aclif.core.interfaces.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.logging\aclif.core.logging.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+    <ProjectReference Include="..\aclif.core.results\aclif.core.results.csproj">
+      <IncludeAssets>runtime</IncludeAssets>
+      <Private>True</Private>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+	  <ProjectReference Include="..\aclif.core.session\aclif.core.session.csproj">
+		  <Private>True</Private>
+		  <IncludeAssets>runtime</IncludeAssets>
+		  <PrivateAssets>all</PrivateAssets>
+	  </ProjectReference>
+    <ProjectReference Include="..\aclif.core.simple\aclif.core.simple.csproj">
+      <Private>True</Private>
+      <IncludeAssets>runtime</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+	  <ProjectReference Include="..\aclif.core.stdio\aclif.core.stdio.csproj" >
+		  <Private>True</Private>
+		  <IncludeAssets>runtime</IncludeAssets>
+		  <PrivateAssets>all</PrivateAssets>
+	  </ProjectReference>
+    <ProjectReference Include="..\aclif.core.system.commandline\aclif.core.system.commandline.csproj">
+      <Private>True</Private>
+      <IncludeAssets>runtime</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
